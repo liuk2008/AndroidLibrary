@@ -1,10 +1,10 @@
-package com.android.common.net.retrofit;
+package com.android.network.retrofit;
 
 import android.support.annotation.NonNull;
 
 
 import com.android.network.callback.Callback;
-import com.android.network.retrofit.CallAdapter;
+
 
 import java.util.HashMap;
 import java.util.List;
