@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="common_color">#4287FF</color>
+    <color name="common_btn_color">#4287FF</color>
+    <color name="common_text_color">#8b919c</color>
+    <color name="common_text_deep_color">#322827</color>
+    <color name="common_text_tip_color">#cccccc</color>
+</resources>

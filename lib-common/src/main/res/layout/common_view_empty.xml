@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:drawableTop="@drawable/common_loading_none"
+    android:text="暂无相关数据"
+    android:textColor="@color/common_text_color"
+    android:textSize="14sp" />

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.android.common">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.BROADCAST_STICKY" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.GET_PACKAGE_SIZE" />
+
+    <permission android:name="android.permission.PACKAGE_USAGE_STATS" />
+
+
+    <application>
+
+        <activity
+            android:name=".widget.PermissionActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Common.Dialog.Theme" />
+
+        <activity
+            android:name=".widget.photo.PhotoPickerActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".widget.photo.PhotoDialogActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Common.Transparent.Theme" />
+
+    </application>
+
+</manifest>
