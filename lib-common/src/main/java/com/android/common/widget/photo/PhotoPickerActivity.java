@@ -34,7 +34,6 @@ import java.util.ArrayList;
 
 /**
  * 图片页面
- * <p/>
  * Created by Administrator on 2016/10/31.
  */
 public class PhotoPickerActivity extends AppCompatActivity {

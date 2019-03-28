@@ -41,4 +41,4 @@ dependencies {
     api 'com.google.code.gson:gson:2.8.4'
 }
 
-apply from: 'bintray.gradle'
+//apply from: 'bintray.gradle'

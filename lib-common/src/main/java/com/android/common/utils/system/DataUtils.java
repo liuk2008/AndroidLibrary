@@ -6,8 +6,8 @@ import android.os.Environment;
 import java.io.File;
 
 /**
- * Context.getExternalFilesDir() --> SDCard/Android/data/你的应用的包名/files/ 目录，一般放一些长时间保存的数据
- * Context.getExternalCacheDir() --> SDCard/Android/data/你的应用包名/cache/目录，一般存放临时缓存数据
+ * Context.getExternalFilesDir() -- SDCard/Android/data/你的应用的包名/files/ 目录，一般放一些长时间保存的数据
+ * Context.getExternalCacheDir() -- SDCard/Android/data/你的应用包名/cache/目录，一般存放临时缓存数据
  * Created by Administrator on 2017/9/26.
  */
 public class DataUtils {

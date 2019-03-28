@@ -13,7 +13,6 @@
 
     <permission android:name="android.permission.PACKAGE_USAGE_STATS" />
 
-
     <application>
 
         <activity
