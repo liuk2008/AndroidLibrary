@@ -42,15 +42,15 @@
           * 注意：使用ShakeInfoUtil工具类可以获取当前页面结构
 
      * widget包
-         * photo包：
-           * 1、增加PhotoDialogActivity，此Activity为透明模式，通过拍照或系统图库获取图片
-           * 2、增加PhotoPickerActivity，遍历系统图库展示图片列表，可选择对应图片
-         * view包：
-           * 1、CircleImageView：设置原型头像
-           * 2、PasswordView：设置支付密码
-         * PermissionActivity，此Activity为Dialog形式，用于Android 6.0 动态申请权限
-           * 1、可单独使用工具类请求权限，获取未授权的权限信息
-           * 2、申请单个、多个权限时，弹出对话框，进入到应用系统信息页面
+          * photo包：
+            * 1、增加PhotoDialogActivity，此Activity为透明模式，通过拍照或系统图库获取图片
+            * 2、增加PhotoPickerActivity，遍历系统图库展示图片列表，可选择对应图片
+          * view包：
+            * 1、CircleImageView：设置原型头像
+            * 2、PasswordView：设置支付密码
+          * PermissionActivity，此Activity为Dialog形式，用于Android 6.0 动态申请权限
+            * 1、可单独使用工具类请求权限，获取未授权的权限信息
+            * 2、申请单个、多个权限时，弹出对话框，进入到应用系统信息页面
 
 
 
