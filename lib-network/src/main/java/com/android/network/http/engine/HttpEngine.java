@@ -4,8 +4,6 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
-
-import com.android.network.BuildConfig;
 import com.android.network.NetStatus;
 import com.android.network.NetUtils;
 import com.android.network.http.request.HttpParams;
@@ -42,6 +40,7 @@ public class HttpEngine {
     private static HttpEngine httpEngine;
     private Context mContext;
     private HttpParams httpParams;
+    private boolean mIsProxy = true;
 
     public static synchronized HttpEngine getInstance() {
         if (httpEngine == null) {
@@ -53,6 +52,11 @@ public class HttpEngine {
     public void init(Context context) {
         mContext = context;
     }
+
+    public void isProxy(boolean isProxy) {
+        mIsProxy = isProxy;
+    }
+
 
     public void setHttpParams(HttpParams httpParams) {
         this.httpParams = httpParams;
@@ -129,12 +133,11 @@ public class HttpEngine {
         String result = "";
         try {
             URL realUrl = new URL(url);
-            // 设置release版本禁止通过代理抓取http、https请求
-            if ("release".equals(BuildConfig.BUILD_TYPE)) {
+            // mIsProxy=true：可以使用代理，mIsProxy=false：禁止使用代理
+            if (!mIsProxy)
                 connection = (HttpURLConnection) realUrl.openConnection(Proxy.NO_PROXY);
-            } else {
+            else
                 connection = (HttpURLConnection) realUrl.openConnection();
-            }
             // 设置连接主机超时
             connection.setConnectTimeout(NetStatus.Type.TIMEOUT_MILLISECONDS);
             // 设置从主机读取数据超时

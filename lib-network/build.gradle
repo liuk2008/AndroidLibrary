@@ -14,10 +14,15 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             debuggable false
         }
+    }
+
+    // 移除lint检查的error
+    lintOptions {
+        abortOnError false
     }
 
 }

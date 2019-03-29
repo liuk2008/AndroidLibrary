@@ -3,13 +3,10 @@ package com.android.network.retrofit.interceptor;
 
 import android.content.Context;
 
-
-import com.android.network.BuildConfig;
 import com.android.network.NetStatus;
 import com.android.network.NetUtils;
 import com.android.network.error.ErrorException;
 import com.android.network.http.request.NetData;
-
 
 import java.io.File;
 import java.io.IOException;
@@ -27,7 +24,7 @@ import okhttp3.Response;
 public class MyOkHttpClient {
 
     private static OkHttpClient instance;
-    private static final int TIME = 15;
+    private static boolean mIsProxy = true;
 
     public static OkHttpClient getInstance(Context context) {
         if (null == instance) {
@@ -80,8 +77,8 @@ public class MyOkHttpClient {
                 .addInterceptor(headerInterceptor)
                 .addInterceptor(loggingInterceptor);
 
-        // release版本禁止抓取http、https请求
-        if ("release".equals(BuildConfig.BUILD_TYPE))
+        // mIsProxy=true：可以使用代理，mIsProxy=false：禁止使用代理
+        if (!mIsProxy)
             builder.proxy(Proxy.NO_PROXY);
         instance = builder.build();
     }
@@ -107,6 +104,10 @@ public class MyOkHttpClient {
             return data;
         }
         return null;
+    }
+
+    public static void isProxy(boolean isProxy) {
+        mIsProxy = isProxy;
     }
 
 }

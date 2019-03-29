@@ -16,7 +16,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             debuggable false
         }
@@ -40,4 +40,4 @@ dependencies {
     api 'com.github.chrisbanes:PhotoView:2.1.3'
 }
 
- apply from: 'bintray.gradle'
+//apply from: 'bintray.gradle'

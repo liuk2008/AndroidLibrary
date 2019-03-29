@@ -3,8 +3,6 @@ package com.android.network.retrofit;
 
 import android.content.Context;
 
-
-
 import com.android.network.NetStatus;
 import com.android.network.retrofit.converter.ConverterFactory;
 import com.android.network.retrofit.converter.DataConverterFactory;
@@ -44,6 +42,7 @@ public class RetrofitEngine {
     private static RetrofitEngine retrofitEngine;
     private OkHttpClient mOkHttpClient;
     private Context mContext;
+    private static boolean mIsProxy = false;
 
     public static synchronized RetrofitEngine getInstance() {
         if (retrofitEngine == null) {
@@ -55,13 +54,16 @@ public class RetrofitEngine {
     // 初始化网络配置
     public void init(Context context) {
         mContext = context;
-        mOkHttpClient = MyOkHttpClient.getInstance(mContext);
+        if (mOkHttpClient == null)
+            mOkHttpClient = MyOkHttpClient.getInstance(mContext);
+    }
+
+    public void isProxy(boolean isProxy) {
+        MyOkHttpClient.isProxy(isProxy);
     }
 
     // 提供外部方法，设置自定义OkHttpClient
     public void configHttpClient(OkHttpClient okHttpClient) {
-        if (null == mContext)
-            throw new RuntimeException("未初始化 RetrofitEngine");
         if (null != okHttpClient)
             mOkHttpClient = okHttpClient;
     }
