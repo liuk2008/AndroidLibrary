@@ -2,10 +2,10 @@
 //    2、上传            gradlew bintrayUpload
 ext {
     bintrayRepo = 'library'   // 修改成bintrayRepo上创建的 maven name
-    bintrayName = 'network' // 修改成bintrayRepo上创建的 package name
+    bintrayName = 'bindview-compiler' // 修改成bintrayRepo上创建的 package name
 
     publishedGroupId = 'com.android.library' // 发布的组织名称
-    artifact = 'network'            // 依赖的lib名称
+    artifact = 'bindview-compiler'            // 依赖的lib名称
     libraryVersion = '1.0.0'   // 版本号
 
     username = 'chanba2010'
@@ -20,7 +20,7 @@ ext {
 
     // 项目描述
     library = [
-            libraryName       : 'lib-network',
+            libraryName       : 'lib-viewinject',
             libraryDescription: '网络框架',
             siteUrl           : 'https://github.com/liuk2008/AndriodLibrary.git'
     ]

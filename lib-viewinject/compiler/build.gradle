@@ -1,5 +1,10 @@
 apply plugin: 'java-library'
 
+// 设置编码
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     // 注解 processor 类，方便系统识别
@@ -10,10 +15,8 @@ dependencies {
     implementation project(':lib-viewinject:annotation')
 }
 
-// 设置编码
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
-}
-
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
+
+//apply from: 'bintray.gradle'
+

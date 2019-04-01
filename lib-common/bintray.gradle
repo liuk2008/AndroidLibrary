@@ -8,6 +8,9 @@ ext {
     artifact = 'common'            // 依赖的lib名称
     libraryVersion = '1.0.0'   // 版本号
 
+    username = 'chanba2010'
+    userkey = 'c45f983479dd72be69d3af6a09ad9045a6312909'
+
     // 开发者信息
     developer = [
             developerId   : 'liuk',
@@ -39,8 +42,8 @@ if (project.hasProperty("android")) { // Android libraries
     task javadoc(type: Javadoc) {  // 生成Javadoc文档
         source = android.sourceSets.main.java.srcDirs
         classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-        options.encoding = "UTF-8"
-        options.charSet = "UTF-8"
+//        options.encoding = "UTF-8"
+//        options.charSet = "UTF-8"
     }
 } else { // Java libraries
     task sourcesJar(type: Jar, dependsOn: classes) {
@@ -48,6 +51,13 @@ if (project.hasProperty("android")) { // Android libraries
         from sourceSets.main.allSource
     }
 }
+
+// 解决上传Javadoc generation failed. Generated Javadoc options
+tasks.withType(Javadoc) {
+    options.addStringOption('encoding', 'UTF-8')
+    options.addStringOption('charSet', 'UTF-8')
+}
+
 // 文档打包成jar
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
@@ -61,8 +71,8 @@ artifacts {
 }
 
 bintray {
-    user = 'chanba2010'
-    key = 'c45f983479dd72be69d3af6a09ad9045a6312909'
+    user = username
+    key = userkey
     configurations = ['archives']
     pkg {
         // 注意：这里的repo、name必须要和你创建Maven仓库的时候的名字一样
