@@ -16,6 +16,7 @@ public class MyViewInjector {
     private static final Map<String, ViewInjector> injectorMap = new HashMap<>();
 
     private static ViewFinder viewFinder = new ViewFinder();
+    private static Class cls = null;
 
     public static void bindView(Activity activity) {
         bind(activity, activity);
@@ -34,8 +35,17 @@ public class MyViewInjector {
     }
 
     private static void bind(Object target, Object source) {
-        String className = target.getClass().getName();
         try {
+            if (cls == null) {
+                if (target instanceof Activity) {
+                    Activity activity = (Activity) target;
+                    cls = Class.forName(activity.getPackageName() + ".R$id");
+                } else if (target instanceof Fragment) {
+                    Fragment fragment = (Fragment) target;
+                    cls = Class.forName(fragment.getContext().getPackageName() + ".R$id");
+                }
+            }
+            String className = target.getClass().getName();
             ViewInjector injector = injectorMap.get(className);
             if (injector == null) {
                 String proxyClassName = className + "ViewInjector";
@@ -43,7 +53,7 @@ public class MyViewInjector {
                 injector = (ViewInjector) clazz.newInstance();
                 injectorMap.put(className, injector);
             }
-            injector.inject(target, source, viewFinder);
+            injector.inject(target, source, cls, viewFinder);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -60,4 +70,5 @@ public class MyViewInjector {
             e.printStackTrace();
         }
     }
+
 }

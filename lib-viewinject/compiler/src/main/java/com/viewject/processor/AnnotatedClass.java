@@ -11,6 +11,7 @@ import com.squareup.javapoet.TypeSpec;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.processing.Messager;
 import javax.lang.model.element.Modifier;
@@ -88,6 +89,12 @@ public class AnnotatedClass {
         classSpec.addField(targetSpec.build());
 
         // 3、构建方法  public void inject(Object object,Object source,Finder finder)
+        // Map参数类型 Map<String,Integer> resIdMap
+        ParameterizedTypeName mapTypeName = ParameterizedTypeName.get(ClassName.get(Map.class),
+                ClassName.get(String.class),
+                ClassName.get(Integer.class));
+
+
         MethodSpec.Builder injectMethodSpec = MethodSpec.methodBuilder("inject")
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(Override.class)
@@ -95,6 +102,7 @@ public class AnnotatedClass {
                 .returns(TypeName.VOID)
                 .addParameter(classTypeName, "object", Modifier.FINAL)// 入参为Activity、Fragment
                 .addParameter(Object.class, "source")
+                .addParameter(Class.class, "cls")
                 .addParameter(TypeUtil.FINDER, "finder");
 
         //  构建方法 public void unbind(Object target)
@@ -113,7 +121,12 @@ public class AnnotatedClass {
                 String fieldName = field.getFieldName();
                 TypeMirror fieldType = field.getFieldType();
                 int resId = field.getResId();
-                injectMethodSpec.addStatement("target.$N = ($T)finder.findView(source,$L)", fieldName, ClassName.get(fieldType), resId);
+                String idName = field.getIdName();
+                if (!"".equals(idName)) {
+                    injectMethodSpec.addStatement("target.$N = ($T)finder.findView(source,cls,$S)", fieldName, ClassName.get(fieldType), idName);
+                } else {
+                    injectMethodSpec.addStatement("target.$N = ($T)finder.findView(source,$L)", fieldName, ClassName.get(fieldType), resId);
+                }
                 unbindMethodSpec.addStatement("target.$N = null", fieldName);
             }
         }
@@ -123,6 +136,7 @@ public class AnnotatedClass {
             for (MyOnclickMethod method : mMethod) {
                 String methodName = method.getMethodName();
                 int resId = method.getResId();
+                String idName = method.getIdName();
                 MethodSpec methodSpec = MethodSpec.methodBuilder("onClick")
                         .addModifiers(Modifier.PUBLIC)
                         .addAnnotation(Override.class)
@@ -138,7 +152,11 @@ public class AnnotatedClass {
                 FieldSpec.Builder fieldSpec = FieldSpec.builder(TypeUtil.ANDROID_VIEW, methodName)
                         .addModifiers(Modifier.PRIVATE);
                 classSpec.addField(fieldSpec.build());
-                injectMethodSpec.addStatement("this.$N = finder.findView(source,$L)", methodName, resId);
+                if (!"".equals(idName)) {
+                    injectMethodSpec.addStatement("this.$N = finder.findView(source,cls,$S)", methodName, idName);
+                } else {
+                    injectMethodSpec.addStatement("this.$N = finder.findView(source,$L)", methodName, resId);
+                }
                 injectMethodSpec.addStatement("this.$N.setOnClickListener($L)", methodName, listener);
                 unbindMethodSpec.addStatement("this.$N.setOnClickListener(null)", methodName);
                 unbindMethodSpec.addStatement("this.$N = null", methodName);

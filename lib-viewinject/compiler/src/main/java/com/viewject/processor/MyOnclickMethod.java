@@ -16,17 +16,19 @@ public class MyOnclickMethod {
 
     private ExecutableElement mElement;
     private int resId;
+    private String idName;
 
     public MyOnclickMethod(Element element) throws IllegalArgumentException {
         if (element.getKind() != ElementKind.METHOD) // 此元素的种类
             throw new IllegalArgumentException(
                     String.format("Only field can be annotated with @%s",
                             MyOnclickMethod.class.getSimpleName()));
-        mElement = (ExecutableElement ) element;
+        mElement = (ExecutableElement) element;
         // 获取指定注解元素的值
         MyOnClick bindView = mElement.getAnnotation(MyOnClick.class);
         resId = bindView.value();
-        if (resId < 0)
+        idName = bindView.resId();
+        if (resId < 0 && "".equals(idName))
             throw new IllegalArgumentException(
                     String.format("value() in %s for field % is not valid",
                             MyBindView.class.getSimpleName(), mElement.getSimpleName()));
@@ -34,6 +36,10 @@ public class MyOnclickMethod {
 
     public int getResId() { // 获取注解上的值
         return resId;
+    }
+
+    public String getIdName() {
+        return idName;
     }
 
     public String getMethodName() {

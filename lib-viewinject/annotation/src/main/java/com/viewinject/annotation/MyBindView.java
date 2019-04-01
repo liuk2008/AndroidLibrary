@@ -9,5 +9,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.FIELD)
 public @interface MyBindView {
-    int value();
+    int value() default -1;
+
+    String resId() default "";
 }

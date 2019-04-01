@@ -8,4 +8,6 @@
          * 3、view-bindview：MyViewInjector通过反射调用注解管理器生成的Java源文件
          * 注意：
                1、使用此lib包时，会增加APK的方法数量以及APK的大小
-               2、使用注解时注意内存泄漏
+               2、使用时注意内存泄漏
+               3、Annotation中必须引用 final 的值，所以在lib中使用会出现异常
+               4、使用此lib包时，packName需和applicationId一致

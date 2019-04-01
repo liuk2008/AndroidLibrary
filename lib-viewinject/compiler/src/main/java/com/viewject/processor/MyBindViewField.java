@@ -15,6 +15,7 @@ public class MyBindViewField {
 
     private VariableElement mElement;
     private int resId;
+    private String idName;
 
     public MyBindViewField(Element element) throws IllegalArgumentException {
         if (element.getKind() != ElementKind.FIELD) // 此元素的种类
@@ -25,7 +26,8 @@ public class MyBindViewField {
         // 获取指定注解元素的值
         MyBindView bindView = mElement.getAnnotation(MyBindView.class);
         resId = bindView.value();
-        if (resId < 0)
+        idName = bindView.resId();
+        if (resId < 0 && "".equals(idName))
             throw new IllegalArgumentException(
                     String.format("value() in %s for field % is not valid",
                             MyBindView.class.getSimpleName(), mElement.getSimpleName()));
@@ -33,6 +35,11 @@ public class MyBindViewField {
 
     public int getResId() { // 获取注解上的值
         return resId;
+    }
+
+
+    public String getIdName() {
+        return idName;
     }
 
     public String getFieldName() {
