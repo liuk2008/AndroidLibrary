@@ -12,11 +12,13 @@ dependencies {
     // JavaPoet 是一个用来生成 .java源文件的Java API
     implementation "com.squareup:javapoet:1.11.1"
 
-    implementation project(':lib-viewinject:annotation')
+    implementation 'com.android.library:bindview-annotation:1.0'
+//    implementation project(':lib-viewinject:annotation')
+
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
-//apply from: 'bintray.gradle'
+apply from: 'bintray.gradle'
 

@@ -19,13 +19,13 @@ android {
             debuggable false
         }
     }
-
 }
+
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:28.0.0'
-    api project(':lib-viewinject:annotation')
+    api 'com.android.library:bindview-annotation:1.0'
 }
 
-//apply from: 'bintray.gradle'
+apply from: 'bintray.gradle'
