@@ -1,11 +1,8 @@
-package lib.android.com.andriodlibrary;
+package com.andriod.library;
 
-import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
+import android.support.v7.app.AppCompatActivity;
 
-import com.android.common.utils.view.ToolbarUtil;
 
 public class MainActivity extends AppCompatActivity {
 

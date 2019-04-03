@@ -20,9 +20,7 @@ public class NetWorkUtils {
         if (null != cm) {
             NetworkInfo info = cm.getActiveNetworkInfo();//  获取可用网络
             if (null != info && info.isConnected()) {
-                if (info.getState() == NetworkInfo.State.CONNECTED) {
-                    return true;
-                }
+                return info.getState() == NetworkInfo.State.CONNECTED;
             }
         }
         return false;

@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -23,6 +24,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.android.common.R;
+import com.android.common.utils.common.ToastUtils;
 import com.android.common.utils.view.StatusBarUtils;
 import com.android.common.utils.view.ToolbarUtil;
 import com.bumptech.glide.Glide;
@@ -41,6 +43,7 @@ public class PhotoPickerActivity extends AppCompatActivity {
     private static final int PHOTO_GRAPH = 6;// 拍照
     private File capturePath;
     private ArrayList<String> datas = new ArrayList<>();
+    private PhotoAdapter adapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,7 +65,7 @@ public class PhotoPickerActivity extends AppCompatActivity {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 4);
         mRecyclerView.setLayoutManager(gridLayoutManager);
 
-        PhotoAdapter adapter = new PhotoAdapter(this, datas);
+        adapter = new PhotoAdapter(this, datas);
         mRecyclerView.setAdapter(adapter);
         // 定义分割线
 //        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL));
@@ -72,22 +75,36 @@ public class PhotoPickerActivity extends AppCompatActivity {
             @Override
             public void onItemClick(String path, int position) {
                 if (position == 0) {
-                    checkPermissions();
-                    File file = new File(Environment.getExternalStorageDirectory() + "/common/image");
-                    //如果文件夹不存在则创建
-                    if (!file.exists() && !file.isDirectory()) {
-                        file.mkdirs();
-                    }
-                    Intent capture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    capturePath = new File(file, System.currentTimeMillis() + "_picture.jpg");
-                    capture.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(capturePath));
-                    startActivityForResult(capture, PHOTO_GRAPH);
+                    if (!checkPermissions(Manifest.permission.CAMERA))
+                        return;
+                    capture();
                 } else {
                     showDialog(path);
                 }
             }
         });
-        queryImage(adapter);
+
+        // android 7.0系统解决拍照后Uri的问题
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+            StrictMode.setVmPolicy(builder.build());
+            builder.detectFileUriExposure();
+        }
+
+        if (checkPermissions(Manifest.permission.READ_EXTERNAL_STORAGE))
+            queryImage(adapter);
+    }
+
+    private void capture() {
+        File file = new File(Environment.getExternalStorageDirectory() + "/common/image");
+        //如果文件夹不存在则创建
+        if (!file.exists() && !file.isDirectory()) {
+            file.mkdirs();
+        }
+        Intent capture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        capturePath = new File(file, System.currentTimeMillis() + "_picture.jpg");
+        capture.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(capturePath));
+        startActivityForResult(capture, PHOTO_GRAPH);
     }
 
     private void queryImage(PhotoAdapter adapter) {
@@ -124,19 +141,7 @@ public class PhotoPickerActivity extends AppCompatActivity {
         }
     }
 
-    // 检查权限
-    private void checkPermissions() {
-        // 请求权限
-        ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.CAMERA}, 0);
-        // 是否授予权限
-        if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA)) {
-            return;
-        }
-    }
-
-    public static void requestPhoto(Activity activity, PhotoDialogActivity.PhotoResultCallback callback) {
+    public static void requestPhoto(Activity activity, PhotoPickerActivity.PhotoResultCallback callback) {
         startPhoto(activity);
         mCallback = callback;
     }
@@ -146,7 +151,7 @@ public class PhotoPickerActivity extends AppCompatActivity {
         activity.startActivity(intent);
     }
 
-    private static PhotoDialogActivity.PhotoResultCallback mCallback;
+    private static PhotoPickerActivity.PhotoResultCallback mCallback;
 
     public interface PhotoResultCallback {
         void photoResult(String photoPath);
@@ -179,6 +184,36 @@ public class PhotoPickerActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
+    }
+
+    // 检查权限
+    private boolean checkPermissions(String permission) {
+        if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(getApplicationContext(), permission)) {
+            ActivityCompat.requestPermissions(this, new String[]{permission}, 0);
+            return false;
+        } else
+            return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        for (int i = 0; i < permissions.length; i++) {
+            if (Manifest.permission.READ_EXTERNAL_STORAGE.equals(permissions[i])) {
+                if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                    queryImage(adapter);
+                } else {
+                    ToastUtils.showToast(getApplicationContext(), "请开启SD卡读写权限");
+                }
+            }
+            if (Manifest.permission.CAMERA.equals(permissions[i])) {
+                if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                    capture();
+                } else {
+                    ToastUtils.showToast(getApplicationContext(), "请开启相机权限");
+                }
+            }
+        }
     }
 
 }

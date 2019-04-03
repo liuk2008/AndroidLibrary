@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +21,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.android.common.R;
+import com.android.common.utils.common.ToastUtils;
 
 import java.io.File;
 
@@ -48,7 +50,7 @@ public class PhotoDialogActivity extends AppCompatActivity implements View.OnCli
         btnCapture.setOnClickListener(this);
         btnPicture.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
-        // android 7.0系统解决拍照的问题
+        // android 7.0系统解决拍照Uri的问题
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
             StrictMode.setVmPolicy(builder.build());
@@ -117,19 +119,12 @@ public class PhotoDialogActivity extends AppCompatActivity implements View.OnCli
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_capture) {
-            checkPermissions();
-            photoView.setVisibility(View.GONE);
-            File file = new File(Environment.getExternalStorageDirectory() + "/common/image");
-            //如果文件夹不存在则创建
-            if (!file.exists() && !file.isDirectory()) {
-                file.mkdirs();
-            }
-            Intent capture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            capturePath = new File(file, System.currentTimeMillis() + "_picture.jpg");
-            capture.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(capturePath));
-            startActivityForResult(capture, PHOTO_GRAPH);
+            if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA))
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 0);
+            else
+                capture();
+
         } else if (id == R.id.btn_picture) {
-            checkPermissions();
             photoView.setVisibility(View.GONE);
             Intent picture = new Intent(Intent.ACTION_PICK, null);
             picture.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, IMAGE_UNSPECIFIED);
@@ -138,17 +133,6 @@ public class PhotoDialogActivity extends AppCompatActivity implements View.OnCli
             photoView.setVisibility(View.GONE);
             mCallback = null;
             finish();
-        }
-    }
-
-    // 检查权限
-    private void checkPermissions() {
-        // 请求权限
-        ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.CAMERA}, 0);
-        // 是否授予权限
-        if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA)) {
-            return;
         }
     }
 
@@ -167,6 +151,29 @@ public class PhotoDialogActivity extends AppCompatActivity implements View.OnCli
 
     public interface PhotoResultCallback {
         void photoResult(String photoPath);
+    }
+
+
+    private void capture() {
+        photoView.setVisibility(View.GONE);
+        File file = new File(Environment.getExternalStorageDirectory() + "/common/image");
+        //如果文件夹不存在则创建
+        if (!file.exists() && !file.isDirectory()) {
+            file.mkdirs();
+        }
+        Intent capture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        capturePath = new File(file, System.currentTimeMillis() + "_picture.jpg");
+        capture.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(capturePath));
+        startActivityForResult(capture, PHOTO_GRAPH);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (Manifest.permission.CAMERA.equals(permissions[0]) && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            capture();
+        else
+            ToastUtils.showToast(getApplicationContext(), "请开启相机权限");
     }
 
 }
