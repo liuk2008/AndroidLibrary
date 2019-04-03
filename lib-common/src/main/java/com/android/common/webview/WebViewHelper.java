@@ -14,7 +14,6 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
@@ -32,6 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
 import com.android.common.R;
+import com.android.common.utils.common.ToastUtils;
 import com.android.common.utils.view.StatusBarUtils;
 import com.android.common.webview.client.MyWebChromeClient;
 import com.android.common.webview.client.MyWebViewClient;
@@ -64,7 +64,7 @@ public class WebViewHelper {
     // webview 读取系统图片
     private ValueCallback<Uri> mUploadMsg;
     private ValueCallback<Uri[]> mUploadMsg5Plus;
-    private File file, imagePath;
+    private File file, captureFile;
 
     public static WebViewHelper create(FragmentActivity activity) {
         WebViewHelper webViewHelper = new WebViewHelper(activity);
@@ -256,21 +256,8 @@ public class WebViewHelper {
     public void showPicWindow() {
         mUploadMsg = webChromeClient.getUploadMsg();
         mUploadMsg5Plus = webChromeClient.getUploadMsgs();
-        // 请求权限
-        ActivityCompat.requestPermissions(activity,
-                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.CAMERA}, 0);
-        // 是否授予权限
-        if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(activity.getApplicationContext(), Manifest.permission.CAMERA)) {
-            resetWebViewPic();
-            return;
-        }
-        if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(activity.getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            resetWebViewPic();
-            return;
-        }
 
-        // android 7.0系统解决拍照的问题
+        // android 7.0系统解决拍照Uri的问题
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
             StrictMode.setVmPolicy(builder.build());
@@ -282,6 +269,7 @@ public class WebViewHelper {
         if (!file.exists() && !file.isDirectory()) {
             file.mkdirs();
         }
+
         if (picPopupWindow == null) {
             View contentView = View.inflate(activity, R.layout.common_popupwindow_photo, null);
             Button btnCancel = contentView.findViewById(R.id.btn_cancel);
@@ -297,9 +285,13 @@ public class WebViewHelper {
             btnCapture.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(activity.getApplicationContext(), Manifest.permission.CAMERA)) {
+                        ToastUtils.showToast(activity.getApplicationContext(), "请开启相机权限");
+                        return;
+                    }
                     Intent capture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    imagePath = new File(file, System.currentTimeMillis() + "_picture.jpg");
-                    capture.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(imagePath));
+                    captureFile = new File(file, System.currentTimeMillis() + "_picture.jpg");
+                    capture.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(captureFile));
                     activity.startActivityForResult(capture, PHOTO_GRAPH);
                     picPopupWindow.dismiss();
                 }
@@ -337,17 +329,15 @@ public class WebViewHelper {
                 return;
             }
             if (requestCode == PHOTO_GRAPH) { // 拍照 返回的data为null
-                if (imagePath.exists()) {
-                    ContentValues values = new ContentValues(2);
-                    values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg/jpg");
-                    values.put(MediaStore.Images.Media.DATA, imagePath.toString());
-                    Uri uri = activity.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-                    if (uri != null) { // 更新系统图库
-                        activity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(imagePath)));
-                        activity.sendBroadcast(new Intent("Intent.ACTION_GET_IMAGE"));
-                        // 将图片传递至webview
-                        setWebViewPic(uri);
-                    }
+                ContentValues values = new ContentValues(2);
+                values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg/jpg");
+                values.put(MediaStore.Images.Media.DATA, captureFile.toString());
+                Uri uri = activity.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+                if (uri != null) { // 更新系统图库
+                    activity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(captureFile)));
+                    activity.sendBroadcast(new Intent("Intent.ACTION_GET_IMAGE"));
+                    // 将图片传递至webview
+                    setWebViewPic(uri);
                 }
             }
             if (requestCode == PHOTO_PICTURE) { // 图库 返回的data不为null

@@ -36,7 +36,7 @@ public class PhotoDialogActivity extends AppCompatActivity implements View.OnCli
     private static final int PHOTO_PICTURE = 7;// 图库
     private static final String IMAGE_UNSPECIFIED = "image/*";
     private View photoView;
-    private File capturePath;
+    private File file, captureFile;
     private String path = "";
 
     @Override
@@ -56,6 +56,11 @@ public class PhotoDialogActivity extends AppCompatActivity implements View.OnCli
             StrictMode.setVmPolicy(builder.build());
             builder.detectFileUriExposure();
         }
+        file = new File(Environment.getExternalStorageDirectory() + "/common/image");
+        //如果文件夹不存在则创建
+        if (!file.exists() && !file.isDirectory()) {
+            file.mkdirs();
+        }
     }
 
     // 获取本地图片
@@ -65,13 +70,13 @@ public class PhotoDialogActivity extends AppCompatActivity implements View.OnCli
             if (requestCode == PHOTO_GRAPH) { // 拍照 返回的data为null
                 ContentValues values = new ContentValues(2);
                 values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg/jpg");
-                values.put(MediaStore.Images.Media.DATA, capturePath.toString());
+                values.put(MediaStore.Images.Media.DATA, captureFile.toString());
                 Uri uri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
                 if (uri != null) { // 更新系统图库
-                    sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(capturePath)));
+                    sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(captureFile)));
                     sendBroadcast(new Intent("Intent.ACTION_GET_IMAGE"));
                     // 传递图片
-                    mCallback.photoResult(capturePath.toString());
+                    mCallback.photoResult(captureFile.toString());
                     mCallback = null;
                     finish();
                 }
@@ -123,7 +128,6 @@ public class PhotoDialogActivity extends AppCompatActivity implements View.OnCli
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 0);
             else
                 capture();
-
         } else if (id == R.id.btn_picture) {
             photoView.setVisibility(View.GONE);
             Intent picture = new Intent(Intent.ACTION_PICK, null);
@@ -153,17 +157,11 @@ public class PhotoDialogActivity extends AppCompatActivity implements View.OnCli
         void photoResult(String photoPath);
     }
 
-
     private void capture() {
         photoView.setVisibility(View.GONE);
-        File file = new File(Environment.getExternalStorageDirectory() + "/common/image");
-        //如果文件夹不存在则创建
-        if (!file.exists() && !file.isDirectory()) {
-            file.mkdirs();
-        }
         Intent capture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        capturePath = new File(file, System.currentTimeMillis() + "_picture.jpg");
-        capture.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(capturePath));
+        captureFile = new File(file, System.currentTimeMillis() + "_picture.jpg");
+        capture.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(captureFile));
         startActivityForResult(capture, PHOTO_GRAPH);
     }
 
