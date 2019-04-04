@@ -2,7 +2,6 @@ package com.android.common.utils.system;
 
 import android.text.TextUtils;
 
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -16,43 +15,21 @@ import java.util.Map;
 
 public class JsonUtil {
 
-    /*
-     * 把一个map变成json字符串
-     *
-     * @param map
-     * @return
+    /**
+     * map -> Json字符串
      */
-    public static String parseMapToJson(Map<?, ?> map) {
+    public static String parseMapToJson(Map<String, Object> map) {
         try {
             Gson gson = new Gson();
             return gson.toJson(map);
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }
 
-    /*
-     * 把一个json字符串变成对象
-     *
-     * @param json
-     * @param cls
-     * @return
-     */
-    public static <T> T parseJsonToBean(String json, Class<T> cls) {
-        Gson gson = new Gson();
-        T t = null;
-        try {
-            t = gson.fromJson(json, cls);
-        } catch (Exception e) {
-        }
-        return t;
-    }
-
-    /*
-     * 把json字符串变成map
-     *
-     * @param json
-     * @return
+    /**
+     * Json字符串 -> map
      */
     public static HashMap<String, Object> parseJsonToMap(String json) {
         Gson gson = new Gson();
@@ -62,22 +39,66 @@ public class JsonUtil {
         try {
             map = gson.fromJson(json, type);
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return map;
     }
 
-    /*
-     * 把json字符串解析成集合 params: new TypeToken<List<AppInfo>>(){}.getType(),
-     *
-     * @param json
-     * @param type new TypeToken<List<yourbean>>(){}.getType()
-     * @return
+    /**
+     * 对象 -> Json字符串
      */
-    public static List<?> parseJsonToList(String json, Type type) {
+    public static String parseBeanToJson(Object object) {
         Gson gson = new Gson();
-        List<?> list = gson.fromJson(json, type);
-        return list;
+        try {
+            return gson.toJson(object);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
+
+    /**
+     * Json字符串 -> 对象
+     */
+    public static <T> T parseJsonToBean(String json, Class<T> cls) {
+        Gson gson = new Gson();
+        try {
+            return gson.fromJson(json, cls);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * list -> Json字符串
+     * list：存储元素为对象元素
+     */
+    public static String parseListToJson(List<Object> list) {
+        Gson gson = new Gson();
+        try {
+            return gson.toJson(list);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /*
+     * Json字符串 -> list
+     */
+    public static <T> List<T> parseJsonToList(String json, TypeToken<T> typeToken) {
+        Gson gson = new Gson();
+        try {
+            Type type = typeToken.getType();
+            return gson.fromJson(json, type);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
 
     /*
      * 获取json串中某个字段的值，注意，只能获取同一层级的value
