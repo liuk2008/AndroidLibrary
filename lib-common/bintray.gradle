@@ -20,7 +20,7 @@ ext {
 
     // 项目描述
     library = [
-            libraryName       : 'lib-network',
+            libraryName       : 'lib-common',
             libraryDescription: '公共模块',
             siteUrl           : 'https://github.com/liuk2008/AndriodLibrary.git'
     ]
