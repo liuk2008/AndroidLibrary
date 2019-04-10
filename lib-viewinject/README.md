@@ -25,6 +25,7 @@
            4、使用此lib包时，packName需和applicationId一致
 
     * 混淆规则
+            -keep class **.R$id {*;}
             -keep class com.viewinject.bindview.** { *; }
             -keep class **ViewInjector{ *; }
             -keepclasseswithmembernames class * {
