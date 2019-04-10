@@ -24,16 +24,12 @@
            3、Annotation中必须引用 final 的值，所以在lib中使用会出现异常
            4、使用此lib包时，packName需和applicationId一致
 
-
-**R文件**
-
-    * 1、Android主项目R文件中控件id是常量，lib包中则不是常量
-         Android在编译APK时会将lib包代码引入，为了防止主项目与lib包中的控件id值一样造成冲突，所以lib包中的控件id不是常量，方便Android编译时进行修改。
-
-    * 2、Android主项目与lib包同时生成R文件，但是里面的控件id值不同
-         Android在不同的项目中都生成R文件，但在运行时控件id全部从主项目中的R文件取值
-
-    * 3、Android中不同的布局文件中控件id可以一致
-         因为在Android的框架设计中，每一个控件都隶属于一棵控件树，每个控件都被其父控件所管理与调配，而根控件是一个容器控件，所有的子控件都是构造在这个根
-		 控件之上，这样并形成了一个控件树的控件域，在这个控件域中是不允许重名的，超出了这个控件域则这些控件的ID是无效的，也就是说在容器控件中的子控件是不
-		 允许重名的，而不在同一容器控件中的两个控件重名也无所谓。
+    * 混淆规则
+            -keep class com.viewinject.bindview.** { *; }
+            -keep class **ViewInjector{ *; }
+            -keepclasseswithmembernames class * {
+                @MyBindView.* <fields>;
+            }
+            -keepclasseswithmembernames class * {
+                @MyOnClick.* <methods>;
+            }
