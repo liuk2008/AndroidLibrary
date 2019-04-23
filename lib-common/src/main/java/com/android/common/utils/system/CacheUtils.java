@@ -40,7 +40,9 @@ public class CacheUtils {
         }
     }
 
-    // 8.0 以下获取APP 缓存大小、数据大小、应用大小
+    /**
+     * 8.0 以下获取APP 缓存大小、数据大小、应用大小
+     */
     private static class MyStatsObserver extends IPackageStatsObserver.Stub {
         @Override
         public void onGetStatsCompleted(PackageStats pStats, boolean succeeded) {
@@ -52,7 +54,9 @@ public class CacheUtils {
         }
     }
 
-    // 8.0 以上获取缓存功能，需要系统权限 android.permission.PACKAGE_USAGE_STATS
+    /**
+     * 8.0 以上获取缓存功能，需要系统权限 android.permission.PACKAGE_USAGE_STATS
+     */
     @RequiresApi(Build.VERSION_CODES.O)
     private static void getCache(Context context, String packName) {
         StorageStatsManager statsManager = (StorageStatsManager) context.getSystemService(Context.STORAGE_STATS_SERVICE);

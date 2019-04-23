@@ -105,7 +105,9 @@ public class BitmapUtils {
         return bitmap;
     }
 
-    // bitmap 转换为byte[]
+    /**
+     * bitmap 转换为byte[]
+     */
     public static byte[] BitmapToByte(Bitmap bitmap) {
         ByteArrayOutputStream baso = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, baso);

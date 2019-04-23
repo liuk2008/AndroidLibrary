@@ -7,7 +7,7 @@ import android.location.LocationManager;
 import android.net.Uri;
 
 public class GPSUtils {
-    /*
+    /**
      * 判断是否开启GPS
      */
     public static boolean isOpenGps(Context context) {
@@ -20,7 +20,7 @@ public class GPSUtils {
         return gps;
     }
 
-    /*
+    /**
      * 强制帮用户打开GPS
      */
     public static void openGPS(Context context) {

@@ -23,19 +23,27 @@ public class WebViewUtils {
     private static Map<String, String> headerMap = new HashMap<>();
     private static String token = "";
 
+    /**
+     * 设置 cookie
+     */
     public static void setCookie(@Nullable String key, @Nullable String value) {
         if (null == key) return;
         if (null == value) value = "";
         cookieMap.put(key, value);
     }
 
+    /**
+     * 设置 header
+     */
     public static void setHeader(@Nullable String key, @Nullable String value) {
         if (null == key) return;
         if (null == value) value = "";
         headerMap.put(key, value);
     }
 
-    // 从cookie中获取token
+    /**
+     * 从cookie中获取token
+     */
     public static void setToken(String url) {
         if (TextUtils.isEmpty(url)) return;
         CookieManager cookieManager = CookieManager.getInstance();
@@ -55,10 +63,15 @@ public class WebViewUtils {
         }
     }
 
+    /**
+     * 获取token
+     */
     public static String getToken() {
         return token;
     }
-
+    /**
+     * 获取cookie集合
+     */
     public static Map<String, String> getCookieMap() {
         return cookieMap;
     }
@@ -67,6 +80,9 @@ public class WebViewUtils {
         return headerMap;
     }
 
+    /**
+     * 清除cookie
+     */
     public static void clearCookie() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             CookieManager.getInstance().removeAllCookies(null);
@@ -76,6 +92,9 @@ public class WebViewUtils {
         cookieMap.clear();
     }
 
+    /**
+     * 清除 header
+     */
     public static void clearHeader() {
         headerMap.clear();
     }

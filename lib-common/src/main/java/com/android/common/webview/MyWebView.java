@@ -10,7 +10,6 @@ import android.webkit.CookieManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
-
 import com.android.common.webview.client.WebViewUtils;
 
 import java.util.HashMap;
@@ -87,7 +86,9 @@ public class MyWebView extends WebView {
         super.reload();
     }
 
-    // 设置cookie
+    /**
+     * 设置cookie
+     */
     private void setCookie(String url) {
         if (TextUtils.isEmpty(url)) return;
         if (WebViewUtils.getCookieMap().size() <= 0) return;

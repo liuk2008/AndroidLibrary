@@ -55,7 +55,9 @@ public class ContextUtils {
         return application;
     }
 
-    //获取栈顶的Activity
+    /**
+     * 获取栈顶的Activity
+     */
     @Nullable
     public static Activity getFrontActivity() {
         return sFrontActivity;

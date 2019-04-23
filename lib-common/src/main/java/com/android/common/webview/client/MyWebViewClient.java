@@ -93,7 +93,9 @@ public class MyWebViewClient extends WebViewClient {
         }
     }
 
-    // 6.0 以上调用
+    /**
+     * 6.0 以上调用
+     */
     @RequiresApi(Build.VERSION_CODES.M)
     @Override
     public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
@@ -173,7 +175,9 @@ public class MyWebViewClient extends WebViewClient {
         return result;
     }
 
-    // 显示自定义错误页
+    /**
+     * 显示自定义错误页
+     */
     private void showError(String error, int src) {
         errorView.setVisibility(View.VISIBLE);
         tvError.setText(error);

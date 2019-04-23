@@ -22,7 +22,9 @@ public class DataUtils {
         return formatSize(cacheSize);
     }
 
-    //清除app缓存（包括webview）
+    /**
+     * 清除app缓存（包括webview）
+     */
     public static boolean clearCache(Context context) {
         try {
             boolean clear = deleteFile(context.getExternalCacheDir())

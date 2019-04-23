@@ -11,7 +11,7 @@ import android.net.NetworkInfo;
 
 public class NetWorkUtils {
 
-    /*
+    /**
      * 判断网络是否连接
      */
     public static boolean isNetConnected(Context context) {
@@ -26,7 +26,7 @@ public class NetWorkUtils {
         return false;
     }
 
-    /*
+    /**
      * 判断是否是wifi or 3g 是否连接
      * ConnectivityManager.TYPE_WIFI
      * ConnectivityManager.TYPE_MOBILE
@@ -40,7 +40,7 @@ public class NetWorkUtils {
         return cm.getActiveNetworkInfo().getType() == netType;
     }
 
-    /*
+    /**
      * 获取网络连接类型
      */
     public static int getConnectedType(Context context) {

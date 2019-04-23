@@ -3,7 +3,6 @@ package com.android.common.utils.exception;
 import android.os.Environment;
 import android.util.Log;
 
-
 import com.android.common.utils.common.LogUtils;
 
 import java.io.File;
@@ -23,7 +22,9 @@ public class ThrowableConfigure {
         initExceptionManager();
     }
 
-    // 初始化异常配置
+    /**
+     * 初始化异常配置
+     */
     private static void initExceptionManager() {
         ExceptionManager.init(new ThrowableHandler() {
             @Override

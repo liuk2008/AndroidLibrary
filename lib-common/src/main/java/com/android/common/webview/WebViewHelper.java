@@ -158,7 +158,9 @@ public class WebViewHelper {
         return mWebView;
     }
 
-    // 释放资源
+    /**
+     * 释放资源
+     */
     private void onDestroy() {
         iv_arrow.setOnClickListener(null);
         iv_close.setOnClickListener(null);
@@ -181,7 +183,9 @@ public class WebViewHelper {
         }
     }
 
-    // 从assets中加载文件
+    /**
+     * 从assets中加载文件
+     */
     public String getFromAssets(String fileName) {
         try {
             InputStreamReader inputReader = new InputStreamReader(
@@ -198,7 +202,9 @@ public class WebViewHelper {
         return "";
     }
 
-    // 注入本地js脚本
+    /**
+     * 注入本地js脚本
+     */
     public void injectJs(WebView webView, String src) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             webView.evaluateJavascript(src, null);
@@ -207,7 +213,9 @@ public class WebViewHelper {
         }
     }
 
-    // 本地调用js方法，无回调方法
+    /**
+     * 本地调用js方法，无回调方法
+     */
     public void excJsMethod(WebView webView, String method) {
         if (method.endsWith("()")) {
             webView.loadUrl("javascript:" + method);
@@ -252,7 +260,9 @@ public class WebViewHelper {
         }
     }
 
-    // 弹出图片方式选择框
+    /**
+     * 弹出图片方式选择框
+     */
     public void showPicWindow() {
         mUploadMsg = webChromeClient.getUploadMsg();
         mUploadMsg5Plus = webChromeClient.getUploadMsgs();
@@ -322,7 +332,9 @@ public class WebViewHelper {
         picPopupWindow.showAtLocation(parent, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
     }
 
-    // 获取本地图片
+    /**
+     * 获取本地图片
+     */
     public void setPicData(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
             if (mUploadMsg == null && mUploadMsg5Plus == null) {
@@ -348,7 +360,9 @@ public class WebViewHelper {
         }
     }
 
-    // 向WebView传递图片
+    /**
+     * 向WebView传递图片
+     */
     private void setWebViewPic(Uri uri) {
         if (mUploadMsg != null) {
             mUploadMsg.onReceiveValue(uri);
@@ -359,7 +373,9 @@ public class WebViewHelper {
         }
     }
 
-    //  取消之后要告诉WebView 不要再等待返回结果，设置为空就等于重置了状态
+    /**
+     * 取消之后要告诉WebView 不要再等待返回结果，设置为空就等于重置了状态
+     */
     private void resetWebViewPic() {
         if (mUploadMsg != null) {
             mUploadMsg.onReceiveValue(null);

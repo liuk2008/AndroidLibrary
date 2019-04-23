@@ -1,4 +1,4 @@
-include ':app'
+include ':app',':buildsrc'
 include ':lib-common'
 include ':lib-network'
 include ':lib-viewinject:annotation'

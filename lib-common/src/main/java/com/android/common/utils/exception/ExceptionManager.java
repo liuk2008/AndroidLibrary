@@ -35,7 +35,9 @@ public class ExceptionManager {
         });
     }
 
-    //设置全局异常捕捉
+    /**
+     * 设置全局异常捕捉
+     */
     private static void setDefaultUncaughtExceptionHandler() {
         // 获取系统默认的异常处理器
         final Thread.UncaughtExceptionHandler originHandler = Thread.getDefaultUncaughtExceptionHandler();

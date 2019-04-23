@@ -23,7 +23,7 @@ public class SystemUtils {
 
     private static final String TAG = SystemUtils.class.getSimpleName();
 
-    /*
+    /**
      * 通过Service的类名来判断是否启动某个服务
      */
     public static boolean getServiceStatus(Context context, String serviceName) {
@@ -43,7 +43,7 @@ public class SystemUtils {
         return false;
     }
 
-    /*
+    /**
      * 查询手机内非系统应用
      */
     public static List<PackageInfo> getAllApps(Context context) {
@@ -62,14 +62,14 @@ public class SystemUtils {
         return apps;
     }
 
-    /*
+    /**
      * 获取 packageInfo
      */
     public static PackageInfo getPackageInfo(Context context) throws PackageManager.NameNotFoundException {
         return context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
     }
 
-    /*
+    /**
      * 获取版本Code
      */
     public static String getVersionCode(Context context) {
@@ -82,11 +82,8 @@ public class SystemUtils {
         }
     }
 
-    /*
+    /**
      * 获取版本号
-     *
-     * @param context
-     * @return
      */
     public static String getVersionName(Context context) {
         try {
@@ -98,14 +95,14 @@ public class SystemUtils {
         }
     }
 
-    /*
+    /**
      * 获取targetSdkVersion
      */
     public static int getTargetSdkVersion(Context context) {
         return context.getApplicationInfo().targetSdkVersion;
     }
 
-    /*
+    /**
      * 获取最大内存
      */
     public static long getMaxMemory() {
@@ -152,9 +149,10 @@ public class SystemUtils {
         return list;
     }
 
-    /*
-     * Android6.0之后，权限分为install时的权限跟运行时权限，如果我们的targetSdkVersion>=23，install权限同runtime权限是分开的
-     * targetSdkVersion < 23 时 即便运行在android6及以上设备 ContextWrapper.checkSelfPermission和Context.checkSelfPermission失效
+    /**
+     * Android 6.0之后，权限分为install权限和runtime权限
+     * targetSdkVersion 大于等于23，install权限同runtime权限是分开的
+     * targetSdkVersion 小于23时，即便运行在 Android 6.0 及以上设备，使用ContextWrapper.checkSelfPermission和Context.checkSelfPermission失效
      * 返回值始终为PERMISSION_GRANTED，此时必须使用PermissionChecker.checkSelfPermission
      */
     public static boolean checkPermission(Context context, String permission) {

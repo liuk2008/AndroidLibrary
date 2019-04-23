@@ -16,7 +16,7 @@ import java.util.Map;
 public class JsonUtil {
 
     /**
-     * map -> Json字符串
+     * map 【转】 Json字符串
      */
     public static String parseMapToJson(Map<String, Object> map) {
         try {
@@ -29,7 +29,7 @@ public class JsonUtil {
     }
 
     /**
-     * Json字符串 -> map
+     * Json字符串 【转】 map
      */
     public static HashMap<String, Object> parseJsonToMap(String json) {
         Gson gson = new Gson();
@@ -45,7 +45,7 @@ public class JsonUtil {
     }
 
     /**
-     * 对象 -> Json字符串
+     * 对象 【转】 Json字符串
      */
     public static String parseBeanToJson(Object object) {
         Gson gson = new Gson();
@@ -58,7 +58,7 @@ public class JsonUtil {
     }
 
     /**
-     * Json字符串 -> 对象
+     * Json字符串 【转】 对象
      */
     public static <T> T parseJsonToBean(String json, Class<T> cls) {
         Gson gson = new Gson();
@@ -71,7 +71,7 @@ public class JsonUtil {
     }
 
     /**
-     * list -> Json字符串
+     * list 【转】 Json字符串
      * list：存储元素为对象元素
      */
     public static String parseListToJson(List<Object> list) {
@@ -84,8 +84,8 @@ public class JsonUtil {
         return null;
     }
 
-    /*
-     * Json字符串 -> list
+    /**
+     * Json字符串 【转】 list
      */
     public static <T> List<T> parseJsonToList(String json, TypeToken<T> typeToken) {
         Gson gson = new Gson();
@@ -97,7 +97,6 @@ public class JsonUtil {
         }
         return null;
     }
-
 
 
     /*

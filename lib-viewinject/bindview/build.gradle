@@ -28,4 +28,4 @@ dependencies {
     api 'com.android.library:bindview-annotation:1.0'
 }
 
-apply from: 'bintray.gradle'
+//apply from: 'bintray.gradle'

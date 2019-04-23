@@ -18,20 +18,26 @@ public class DateUtils {
     private static SimpleDateFormat month = new SimpleDateFormat("yyyy-MM-dd");
     private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    // 获取本地时间
+    /**
+     * 获取本地时间
+     */
     public static String getNowTime() {
         Date date = new Date(System.currentTimeMillis());
         return format.format(date);
     }
 
-    // 时间戳转换成字符串
+    /**
+     * 时间戳转换成字符串
+     */
     public static String getDateToString(long time) {
         Date d = new Date(time);
         format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return format.format(d);
     }
 
-    // 字符串转换成时间戳
+    /**
+     * 字符串转换成时间戳
+     */
     public static long getStringToDate(String time) {
         format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date();
@@ -43,7 +49,9 @@ public class DateUtils {
         return date.getTime();
     }
 
-    // 获取n月前月份
+    /**
+     * 获取n月前月份
+     */
     public static String getLastMonth(int i) {
         Date date = new Date();
         Calendar calendar = Calendar.getInstance();
@@ -73,7 +81,9 @@ public class DateUtils {
     }
 
 
-    // 1小时之内的数据显示*分钟前，小于一分钟显示刚刚，大于1小时小于一天的数据显示*小时前，大于一天的显示*天前
+    /**
+     * 1小时之内的数据显示*分钟前，小于一分钟显示刚刚，大于1小时小于一天的数据显示*小时前，大于一天的显示*天前
+     */
     public static String showTime(String time) throws ParseException {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = df.parse(time);

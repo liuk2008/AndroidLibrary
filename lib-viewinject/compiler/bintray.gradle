@@ -2,11 +2,11 @@
 //    2、上传            gradlew bintrayUpload
 ext {
     bintrayRepo = 'library'   // 修改成bintrayRepo上创建的 maven name
-    bintrayName = 'bindview-compiler' // 修改成bintrayRepo上创建的 package name
+    bintrayName = 'viewinject-compiler' // 修改成bintrayRepo上创建的 package name
 
     publishedGroupId = 'com.android.library' // 发布的组织名称
-    artifact = 'bindview-compiler'            // 依赖的lib名称
-    libraryVersion = '1.1'   // 版本号
+    artifact = 'viewinject-compiler'            // 依赖的lib名称
+    libraryVersion = '1.0'   // 版本号
 
     username = 'chanba2010'
     userkey = 'c45f983479dd72be69d3af6a09ad9045a6312909'
@@ -20,8 +20,8 @@ ext {
 
     // 项目描述
     library = [
-            libraryName       : 'bindview-compiler',
-            libraryDescription: 'View注解框架',
+            libraryName       : 'viewinject-compiler',
+            libraryDescription: 'View注解处理器',
             siteUrl           : 'https://github.com/liuk2008/AndriodLibrary.git'
     ]
 

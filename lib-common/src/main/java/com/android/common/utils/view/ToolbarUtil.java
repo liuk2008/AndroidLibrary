@@ -18,7 +18,9 @@ public class ToolbarUtil {
     private static final int TYPE_NORMAL = 0;
     private static final int TYPE_BACK = 1;
 
-    // 设置背景色
+    /**
+     * 设置背景色
+     */
     public static void configTitleBgRes(Activity activity, int res) {
         View rootView = activity.findViewById(android.R.id.content);
         configTitleBgRes(rootView, res);
@@ -48,7 +50,9 @@ public class ToolbarUtil {
         }
     }
 
-    // 设置标题
+    /**
+     * 设置标题
+     */
     public static void configTitle(Activity activity, String title, int type) {
         View rootView = activity.findViewById(android.R.id.content);
         configTitlebar(rootView, title, type, TYPE_NORMAL);
