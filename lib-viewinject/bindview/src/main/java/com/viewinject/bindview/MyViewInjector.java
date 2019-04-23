@@ -37,13 +37,7 @@ public class MyViewInjector {
     private static void bind(Object target, Object source) {
         try {
             if (cls == null) {
-                if (target instanceof Activity) {
-                    Activity activity = (Activity) target;
-                    cls = Class.forName(activity.getPackageName() + ".R$id");
-                } else if (target instanceof Fragment) {
-                    Fragment fragment = (Fragment) target;
-                    cls = Class.forName(fragment.getContext().getPackageName() + ".R$id");
-                }
+                cls = Class.forName("com.viewinject.bindview.Id");
             }
             String className = target.getClass().getName();
             ViewInjector injector = injectorMap.get(className);

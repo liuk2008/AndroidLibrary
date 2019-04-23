@@ -1,4 +1,4 @@
-package com.viewject.processor;
+package com.viewinject.processor;
 
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
