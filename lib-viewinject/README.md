@@ -22,9 +22,7 @@
            1、使用此lib包时，会增加APK的方法数量以及APK的大小
            2、使用时注意内存泄漏
            3、Annotation中必须引用 final 的值，所以在lib中使用会出现异常
-    * 版本兼容：
-         v1.0：使用此lib包时，manifest packName 和 applicationId 必须一致
-         v1.1：在主项目中引用 apply plugin: com.android.plugin.GenerateClassPlugin，可解决 manifest packName 和 applicationId 不一致问题
+           4、在主项目中引用 apply plugin: com.android.plugin.GenerateClassPlugin，可解决 manifest packName 和 applicationId 不一致问题
 
     * 混淆规则
             -keep class com.viewinject.bindview.** { *; }
