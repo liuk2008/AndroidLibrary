@@ -21,3 +21,17 @@ Android演示项目
     * 3、引用方式：
          * 1、引用以.properties结尾的文件名称：apply plugin:'com.xx.plugin'
          * 2、引用插件全类名：apply plugin:com.xx.plugin.XXXPlugin
+
+**plugin-injectclass**
+
+    * 此插件主要用于修改主项目或jar中指定的class文件
+    * 1、在 build.gradle 文件中配置插件参数
+            injectClass {
+                dirClass "xx.xx.xx.xx"
+                dirCode "xxxxxxxxxxxx"
+                jarName "xx.xx.xx.xx"
+                jarClass "xx.xx.xx.xx"
+                jarCode "xxxxxxxxxxxx"
+            }
+    * 2、定义Gradle Plugin插件，注册Transform，同时获取 build.gradle 文件中的配置信息
+    * 3、获取Transform输出的dir和jar包目录，修改指定的class文件

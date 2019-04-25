@@ -12,12 +12,22 @@ Android演示项目
          apply plugin: 'groovy'
 
          dependencies {
-             //gradle sdk
-             compile gradleApi()
-             //groovy sdk
-             compile localGroovy()
+            // gradle sdk 使用项目中指定的gradle wrapper版本，插件中使用的Project对象等就来自这里
+            implementation  gradleApi()
+            // groovy sdk
+            implementation  localGroovy()
+            // Android编译的大部分gradle源码，比如TaskManager、ransform API
+            implementation 'com.android.tools.build:gradle:3.2.0'
+            implementation 'org.javassist:javassist:3.24.0-GA'
          }
 
     * 3、引用方式：
          * 1、引用以.properties结尾的文件名称：apply plugin:'com.xx.plugin'
          * 2、引用插件全类名：apply plugin:com.xx.plugin.XXXPlugin
+
+**plugin-viewinject**
+
+    * 此插件需结合 viewinject 注解工具使用，主要解决主项目中 manifest packageName 和 applicationId 不一致时，无法查找控件id问题
+    * 1、定义 Gradle Plugin 插件，注册 Transform，同时获取 manifest packageName
+    * 2、根据指定的 packageName，获取 Transform 输出的 R.class
+    * 3、读取 R.class 中内部类 id.class，生成 Id.class，输出到指定的文件路径

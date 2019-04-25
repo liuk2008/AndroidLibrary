@@ -5,7 +5,10 @@ import com.android.build.gradle.internal.pipeline.TransformManager
 import com.android.ide.common.internal.WaitableExecutor
 import com.android.utils.FileUtils
 import org.apache.commons.codec.digest.DigestUtils
+import org.apache.http.util.TextUtils
 import org.gradle.api.Project
+
+import java.util.concurrent.Callable
 
 /**
  * Created by liuk on 2019/4/15
@@ -14,10 +17,11 @@ class InjectClassTransform extends Transform {
 
     WaitableExecutor waitableExecutor = WaitableExecutor.useGlobalSharedThreadPool()
     Project project
-    String injectDirClass
-    String injectDirCode
-    String injectJarClass
-    String injectJarCode
+    String dirClass
+    String dirCode
+    String jarName
+    String jarClass
+    String jarCode
 
     InjectClassTransform(Project project) {
         this.project = project
@@ -79,48 +83,50 @@ class InjectClassTransform extends Transform {
         transformInvocation.inputs.each { TransformInput input ->
             // 遍历文件夹
             input.directoryInputs.each { DirectoryInput directoryInput ->
-                processDirectoryInput(outputProvider, directoryInput, isIncremental)
+//                processDirectoryInput(outputProvider, directoryInput, isIncremental)
                 // 多线程处理文件
-//                waitableExecutor.execute(new Callable<Object>() {
-//                    @Override
-//                    Object call() throws Exception {
-//                        processDirectoryInput(outputProvider, directoryInput, isIncremental)
-//                        return null
-//                    }
-//                })
+                waitableExecutor.execute(new Callable<Object>() {
+                    @Override
+                    Object call() throws Exception {
+                        processDirectoryInput(outputProvider, directoryInput, isIncremental)
+                        return null
+                    }
+                })
             }
             // 遍历jar文件，但不做操作
             input.jarInputs.each { JarInput jarInput ->
-                processJarInput(outputProvider, jarInput, isIncremental)
+//                processJarInput(outputProvider, jarInput, isIncremental)
                 // 异步并发处理jar/class
-//                waitableExecutor.execute(new Callable<Object>() {
-//                    @Override
-//                    Object call() throws Exception {
-//                        processJarInput(outputProvider, jarInput, isIncremental)
-//                        return null
-//                    }
-//                })
+                waitableExecutor.execute(new Callable<Object>() {
+                    @Override
+                    Object call() throws Exception {
+                        processJarInput(outputProvider, jarInput, isIncremental)
+                        return null
+                    }
+                })
             }
         }
         // 等待所有任务结束
-//        waitableExecutor.waitForTasksWithQuickFail(true)
+        waitableExecutor.waitForTasksWithQuickFail(true)
         Logger.error("======end transform======")
     }
 
     void processJarInput(TransformOutputProvider outputProvider, JarInput jarInput, boolean isIncremental) {
-        String jarName = jarInput.name
+        String jarInputName = jarInput.name
         String srcPath = jarInput.file.absolutePath
-        if (jarName.endsWith(".jar"))
-            jarName = jarName.substring(0, jarName.length() - 4)
+        if (jarInputName.endsWith(".jar"))
+            jarInputName = jarInputName.substring(0, jarInputName.length() - 4)
         String md5Hex = DigestUtils.md5Hex(srcPath)
         // 此下一个Transform输入数据的路径
-        File outputFile = outputProvider.getContentLocation(jarName + "-" + md5Hex, jarInput.contentTypes, jarInput.scopes, Format.JAR)
+        File outputFile = outputProvider.getContentLocation(jarInputName + "-" + md5Hex, jarInput.contentTypes, jarInput.scopes, Format.JAR)
         // 处理需要修改的jar包
-        if (jarInput.name.contains(":test")) {
-            Logger.error("------>修改jar包中的class文件")
-            Logger.error("jar : " + jarInput.name + " --> " + outputFile.absolutePath)
-            InjectClass.injectJar(project, srcPath, outputFile.absolutePath, injectJarClass, injectJarCode)
-            return
+        if (!TextUtils.isEmpty(jarName) && !TextUtils.isEmpty(jarClass) && !TextUtils.isEmpty(jarCode)) {
+            if (jarInput.name.startsWith(jarName)) {
+                Logger.error("------>修改jar包中的class文件")
+                Logger.error("jar : " + jarInput.name + " --> " + outputFile.absolutePath)
+                InjectClass.injectJar(project, srcPath, outputFile.absolutePath, jarClass, jarCode)
+                return
+            }
         }
         if (isIncremental) {         // 增量编译
             if (jarInput.status != Status.NOTCHANGED)
@@ -181,7 +187,10 @@ class InjectClassTransform extends Transform {
         } else {
             FileUtils.copyDirectory(directoryInput.file, outputFile)
         }
-        InjectClass.injectDir(project, outputFile, injectDirClass, injectDirCode)
+        // 处理dir中需要修改的class文件
+        if (!TextUtils.isEmpty(dirClass) && !TextUtils.isEmpty(dirCode)) {
+            InjectClass.injectDir(project, outputFile, dirClass, dirCode)
+        }
     }
 
 }
