@@ -80,6 +80,12 @@ public class MyWebView extends WebView {
     }
 
     @Override
+    public void loadUrl(String url, Map<String, String> additionalHttpHeaders) {
+        setCookie(url);
+        super.loadUrl(url, additionalHttpHeaders);
+    }
+
+    @Override
     public void reload() {
         String url = getUrl();
         setCookie(url);
