@@ -2,11 +2,9 @@ package com.android.common.webview;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.webkit.CookieManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
@@ -71,18 +69,19 @@ public class MyWebView extends WebView {
             webSettings.setAllowUniversalAccessFromFileURLs(true); // 解决跨域的问题，访问其他网站接口。
         }
 
+//        webSettings.setUserAgentString(webSettings.getUserAgentString().concat("Android-APP"));  // 在user-agent添加参数
     }
 
     @Override
     public void loadUrl(String url) {
         setCookie(url);
-        super.loadUrl(url);
-    }
-
-    @Override
-    public void loadUrl(String url, Map<String, String> additionalHttpHeaders) {
-        setCookie(url);
-        super.loadUrl(url, additionalHttpHeaders);
+        if (WebViewUtils.getHeaderMap().size() <= 0) {
+            super.loadUrl(url);
+        } else {
+            // 注意：只是在一级页面的header有效，二级页面的header无效
+            Map<String, String> hashMap = new HashMap<>(WebViewUtils.getHeaderMap());
+            super.loadUrl(url, hashMap);
+        }
     }
 
     @Override
@@ -98,21 +97,11 @@ public class MyWebView extends WebView {
     private void setCookie(String url) {
         if (TextUtils.isEmpty(url)) return;
         if (WebViewUtils.getCookieMap().size() <= 0) return;
-        if (url.startsWith("http")) {
-            Uri uri = Uri.parse(url);
-            String domain = uri.getHost();
+        if (url.startsWith("http://") || url.startsWith("https://")) {
             Map<String, String> hashMap = new HashMap<>(WebViewUtils.getCookieMap());
-            CookieManager cookieManager = CookieManager.getInstance();
-            cookieManager.setAcceptCookie(true);
             for (String key : hashMap.keySet()) {
                 String value = hashMap.get(key);
-                cookieManager.setCookie(domain, key + "=" + value);
-            }
-            // 只有cookie的domain和path与请求的URL匹配才会发送这个cookie。
-            cookieManager.setCookie(domain, "domain=" + domain);
-            cookieManager.setCookie(domain, "path=/");
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                cookieManager.flush(); // 立即同步cookie的操作
+                CookieUtil.setCookie(url, key, value);
             }
         }
     }

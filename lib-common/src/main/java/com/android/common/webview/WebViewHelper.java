@@ -252,12 +252,7 @@ public class WebViewHelper {
     }
 
     public void load(String url) {
-        if (WebViewUtils.getHeaderMap().size() <= 0) {
-            mWebView.loadUrl(url);
-        } else {
-            Map<String, String> hashMap = new HashMap<>(WebViewUtils.getHeaderMap());
-            mWebView.loadUrl(url, hashMap);
-        }
+        mWebView.loadUrl(url);
     }
 
     /**

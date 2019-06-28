@@ -160,6 +160,7 @@ public class MyWebViewClient extends WebViewClient {
             webViewClientInterface.SSLException(webView, handler, error);
     }
 
+
     /**
      * 拦截 url 跳转,在里边添加点击链接跳转或者操作
      * 1、WebView的前进、后退、刷新、以及post请求都不会调用shouldOverrideUrlLoading方法
@@ -169,10 +170,13 @@ public class MyWebViewClient extends WebViewClient {
     @Override
     public boolean shouldOverrideUrlLoading(WebView webView, String url) {
         Log.d(TAG, "shouldOverrideUrlLoading: url-->" + url);
-        boolean result = false;
-        if (webViewClientInterface != null)
-            result = webViewClientInterface.onLoadUrl(webView, url);
-        return result;
+        if (webViewClientInterface != null) {
+            boolean result = webViewClientInterface.onLoadUrl(webView, url);
+            return result;
+        } else {
+            webView.loadUrl(url, WebViewUtils.getHeaderMap());
+            return true;
+        }
     }
 
     /**
