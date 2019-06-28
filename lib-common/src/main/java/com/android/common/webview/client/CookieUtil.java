@@ -1,11 +1,10 @@
-package com.android.common.webview;
+package com.android.common.webview.client;
 
 
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.webkit.CookieManager;
 
 

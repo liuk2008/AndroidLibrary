@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
+import com.android.common.webview.client.CookieUtil;
 import com.android.common.webview.client.WebViewUtils;
 
 import java.util.HashMap;
