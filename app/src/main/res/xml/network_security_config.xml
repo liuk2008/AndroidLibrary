@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 需在Application配置android:networkSecurityConfig="@xml/network_security_config"-->
+<network-security-config>
+    <!-- 处理7.0系统无法抓取https请求-->
+    <debug-overrides>
+        <trust-anchors>
+            <certificates src="user" />
+        </trust-anchors>
+    </debug-overrides>
+    <!--处理9.0系统无法使用http请求-->
+    <base-config cleartextTrafficPermitted="true" />
+</network-security-config>
+
