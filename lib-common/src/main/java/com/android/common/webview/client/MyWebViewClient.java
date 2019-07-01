@@ -3,6 +3,7 @@ package com.android.common.webview.client;
 import android.graphics.Bitmap;
 import android.net.http.SslError;
 import android.os.Build;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +19,10 @@ import android.widget.TextView;
 
 import com.android.common.R;
 import com.android.common.webview.MyWebView;
+
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 
 /**
  * 处理网络错误，加载自定义页面
@@ -200,6 +205,40 @@ public class MyWebViewClient extends WebViewClient {
 
     public void setWebViewClientInterface(WebViewClientInterface webViewClientInterface) {
         this.webViewClientInterface = webViewClientInterface;
+    }
+
+    @Nullable
+    @Override
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+//        executeRequest(request);
+        return super.shouldInterceptRequest(view, request);
+    }
+
+    /**
+     * 需单独建立链接从header里面取token
+     */
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    private void executeRequest(final WebResourceRequest request) {
+        final String url = request.getUrl().toString();
+        String scheme = request.getUrl().getScheme();
+        if ("http".equalsIgnoreCase(scheme) || "https".equalsIgnoreCase(scheme))
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+                        connection.connect();
+                        int responseCode = connection.getResponseCode();
+                        if (responseCode == 200) {
+                            String cookie = connection.getHeaderField("Set-Cookie");
+                            Log.d(TAG, "cookie: " + cookie);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
     }
 
 }

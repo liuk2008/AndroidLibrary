@@ -25,7 +25,7 @@
 	* 2、封装WebViewUtils工具类，提供获取Cookie，Header等方法
 	* 3、封装WebChromeClient，提供showPicWindow回调方法，处理文件上传
 	* 4、封装WebViewClient，提供相关回调方法
-	     1、onLoadUrl：处理特定URL
+	     1、handleUrl：处理特定URL
 	     2、executorJs：与js脚本交互
 	     3、处理网络错误，显示自定义错误界面
 	* 5、封装WebViewHelper，加载自定义WebView，监听对应事件，提供方法

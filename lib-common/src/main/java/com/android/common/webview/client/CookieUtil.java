@@ -29,7 +29,9 @@ public class CookieUtil {
      */
     public static void setCookie(@Nullable String url, @Nullable String key, @Nullable String value) {
         if (TextUtils.isEmpty(url) || TextUtils.isEmpty(key) || TextUtils.isEmpty(value)) return;
-        if (url.startsWith("http://") || url.startsWith("https://"))
+        Uri uri = Uri.parse(url);
+        String scheme = uri.getScheme();
+        if ("http".equalsIgnoreCase(scheme) || "https".equalsIgnoreCase(scheme))
             url = Uri.parse(url).getHost();
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.setAcceptCookie(true);

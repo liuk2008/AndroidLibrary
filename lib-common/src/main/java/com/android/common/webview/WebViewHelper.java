@@ -71,6 +71,8 @@ public class WebViewHelper {
         webViewHelper.initView();
         webViewHelper.initListener();
         webViewHelper.registerLifecycle();
+        WebViewUtils.clearHeader();
+        WebViewUtils.clearCookie();
         return webViewHelper;
     }
 
