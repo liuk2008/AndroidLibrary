@@ -170,13 +170,12 @@ public class MyWebViewClient extends WebViewClient {
     @Override
     public boolean shouldOverrideUrlLoading(WebView webView, String url) {
         Log.d(TAG, "shouldOverrideUrlLoading: url-->" + url);
-        if (webViewClientInterface != null) {
-            boolean result = webViewClientInterface.onLoadUrl(webView, url);
-            return result;
-        } else {
-            webView.loadUrl(url, WebViewUtils.getHeaderMap());
-            return true;
-        }
+        boolean result = false;
+        if (webViewClientInterface != null)
+            result = webViewClientInterface.handleUrl(url);  // 处理特定url
+        if (!result)
+            webView.loadUrl(url);
+        return true;
     }
 
     /**
@@ -190,7 +189,7 @@ public class MyWebViewClient extends WebViewClient {
 
     public interface WebViewClientInterface {
         // 处理特定url
-        boolean onLoadUrl(WebView webView, String url);
+        boolean handleUrl(String url);
 
         // 执行js脚本
         void executorJs(WebView webView, String url);

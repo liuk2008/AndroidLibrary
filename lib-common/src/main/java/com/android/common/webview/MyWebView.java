@@ -76,13 +76,9 @@ public class MyWebView extends WebView {
     @Override
     public void loadUrl(String url) {
         setCookie(url);
-        if (WebViewUtils.getHeaderMap().size() <= 0) {
-            super.loadUrl(url);
-        } else {
-            // 注意：只是在一级页面的header有效，二级页面的header无效
-            Map<String, String> hashMap = new HashMap<>(WebViewUtils.getHeaderMap());
-            super.loadUrl(url, hashMap);
-        }
+        // 注意：只是在一级页面的header有效，二级页面的header无效
+        Map<String, String> hashMap = new HashMap<>(WebViewUtils.getHeaderMap());
+        super.loadUrl(url, hashMap);
     }
 
     @Override
