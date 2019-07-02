@@ -1,6 +1,7 @@
 include ':app'
 include ':lib-common'
 include ':lib-network'
+include ':lib-database'
 include ':lib-viewinject:annotation'
 include ':lib-viewinject:compiler'
 include ':lib-viewinject:bindview'
