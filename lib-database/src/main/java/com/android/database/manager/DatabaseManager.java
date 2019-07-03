@@ -65,7 +65,7 @@ public class DatabaseManager {
             @Override
             public List<T> call() {
                 // 注意开启事务
-                Log.d(TAG, "-->开始数据查询");
+                Log.d(TAG, "--> query start");
                 List<T> list = new ArrayList<>();
                 Cursor cursor = null;
                 try {
@@ -73,25 +73,13 @@ public class DatabaseManager {
                     if (cursor != null) {
                         while (cursor.moveToNext()) {
                             T t = clazz.newInstance();
-                            for (int i = 1; i < cursor.getColumnCount(); i++) {
-                                int type = cursor.getType(i);
-                                String name = cursor.getColumnName(i);
-                                if (type == Cursor.FIELD_TYPE_INTEGER) {
-                                    int value = cursor.getInt(i);
-                                    TableEntity.getTableEntity(t, name, value);
-                                } else if (type == Cursor.FIELD_TYPE_FLOAT) {
-                                    float value = cursor.getFloat(i);
-                                    TableEntity.getTableEntity(t, name, value);
-                                } else {
-                                    String value = cursor.getString(i);
-                                    TableEntity.getTableEntity(t, name, value);
-                                }
-                            }
+                            TableEntity.getTableEntity(t, cursor);
                             list.add(t);
                         }
                     }
-                    Log.d(TAG, "--> 完成数据查询");
+                    Log.d(TAG, "--> query end");
                 } catch (Exception e) {
+                    Log.d(TAG, "--> query fail");
                     e.printStackTrace();
                 } finally {
                     if (cursor != null) {
@@ -104,11 +92,10 @@ public class DatabaseManager {
         });
         try {
             List<T> list = future.get();
-            Log.d(TAG, "--> query successful");
             data.addAll(list); // 返回查询的数据
             status = OnCompleteListener.SUCCESS;
         } catch (Exception e) {
-            Log.d(TAG, "--> query fail");
+            Log.d(TAG, "--> query exception");
             e.printStackTrace();
         }
         showStatus(QUERY, status);
@@ -126,7 +113,7 @@ public class DatabaseManager {
             @Override
             public List<Map<String, Object>> call() {
                 // 注意开启事务
-                Log.d(TAG, "-->开始数据查询");
+                Log.d(TAG, "--> query start");
                 List<Map<String, Object>> list = new ArrayList<>();
                 Cursor cursor = null;
                 try {
@@ -151,8 +138,9 @@ public class DatabaseManager {
                             list.add(hashMap);
                         }
                     }
-                    Log.d(TAG, "--> 完成数据查询");
+                    Log.d(TAG, "--> query end");
                 } catch (Exception e) {
+                    Log.d(TAG, "--> query fail");
                     e.printStackTrace();
                 } finally {
                     if (cursor != null) {
@@ -165,11 +153,10 @@ public class DatabaseManager {
         });
         try {
             List<Map<String, Object>> list = future.get();
-            Log.d(TAG, "--> query successful");
             data.addAll(list); // 返回查询的数据
             status = OnCompleteListener.SUCCESS;
         } catch (Exception e) {
-            Log.d(TAG, "--> query fail");
+            Log.d(TAG, "--> query exception");
             e.printStackTrace();
         }
         showStatus(QUERY, status);
@@ -221,16 +208,18 @@ public class DatabaseManager {
         execSql(sql, args, DELETE);
     }
 
-    private void execSql(final String sql, final Object[] args, String type) {
+    private void execSql(final String sql, final Object[] args, final String type) {
         Future<Object> future = executor.submit(new Callable<Object>() {
             @Override
             public Object call() {
                 try {
                     // 执行sql成功
                     database.execSQL(sql, args);
+                    Log.d(TAG, "--> " + type + " successful");
                     return new Object();
                 } catch (Exception e) {
                     // 执行sql失败
+                    Log.d(TAG, "--> " + type + " fail");
                     e.printStackTrace();
                     return null;
                 }
@@ -238,11 +227,10 @@ public class DatabaseManager {
         });
         try {
             Object object = future.get();
-            Log.d(TAG, "--> " + type + " " + (null != object ? "successful" : "fail"));
             int status = (null != object ? OnCompleteListener.SUCCESS : OnCompleteListener.FAIL);
             showStatus(type, status);
         } catch (Exception e) {
-            Log.d(TAG, "--> " + type + " fail");
+            Log.d(TAG, "--> " + type + " exception");
             showStatus(type, OnCompleteListener.FAIL);
             e.printStackTrace();
         }

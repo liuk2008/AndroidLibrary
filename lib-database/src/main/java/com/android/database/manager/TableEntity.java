@@ -1,5 +1,7 @@
 package com.android.database.manager;
 
+import android.database.Cursor;
+
 import com.android.database.annotation.Column;
 import com.android.database.annotation.Table;
 
@@ -14,6 +16,7 @@ import java.util.List;
  */
 public class TableEntity {
 
+    private static final String TAG = TableEntity.class.getSimpleName();
     private static String tableName = "temp";
 
     /**
@@ -64,39 +67,43 @@ public class TableEntity {
      * 解析数据
      *
      * @param t      表结构实例对象
-     * @param object
+     * @param cursor
      * @param <T>
      */
-    public static <T> void getTableEntity(T t, String name, Object object) {
+    public static <T> void getTableEntity(T t, Cursor cursor) {
         try {
             Field[] fields = t.getClass().getDeclaredFields();
             for (Field field : fields) {
                 Column annotation = field.getAnnotation(Column.class);
                 if (annotation != null) {
                     String column = annotation.name();
-                    if (name.equalsIgnoreCase(column)) {
-                        Class<?> type = field.getType();
-                        if (type == Integer.TYPE || type == Long.TYPE) {
-                            long value = (object == null ? 0 : (long) object);
-                            field.setLong(t, value);
-                        } else if (type == Float.TYPE || type == Double.TYPE) {
-                            double value = (object == null ? 0.0 : (double) object);
-                            field.setDouble(t, value);
-                        } else if (type == Boolean.TYPE) { // 0 true 1 false
-                            int value = (object == null ? 1 : (int) object);
-                            field.setBoolean(t, value == 0);
-                        } else {
-                            String value = (object == null ? "" : (String) object);
-                            field.set(t, value);
-                        }
-                        break;
-                    }
+                    int columnIndex = cursor.getColumnIndex(column);
+                    Class<?> type = field.getType();
+                    if (type == Integer.TYPE)
+                        field.setInt(t, cursor.getInt(columnIndex));
+                    else if (type == Long.TYPE)
+                        field.setLong(t, cursor.getLong(columnIndex));
+                    else if (type == Float.TYPE)
+                        field.setFloat(t, cursor.getFloat(columnIndex));
+                    else if (type == Double.TYPE)
+                        field.setDouble(t, cursor.getDouble(columnIndex));
+                    else if (type == Boolean.TYPE) {// 0 true 1 false
+                        field.setBoolean(t, cursor.getInt(columnIndex) == 0);
+                    } else
+                        field.set(t, cursor.getString(columnIndex));
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    /**
+     * 转换sql语句
+     *
+     * @param object 实例对象
+     * @return
+     */
 
     public static Object[] insertTableEntity(Object object) {
         Object[] sqlInfo = new Object[2];
@@ -108,25 +115,22 @@ public class TableEntity {
             sql.append(tableName);
             sql.append("(");
             Field[] fields = clazz.getDeclaredFields();
-            for (int i = 0; i < fields.length; i++) {
-                Field field = fields[i];
+            for (Field field : fields) {
                 Column annotation = field.getAnnotation(Column.class);
                 if (annotation != null) {
                     String column = annotation.name();
-                    sql.append(column);
-                    if (i == fields.length - 1)
-                        sql.append(")");
-                    else
-                        sql.append(",");
+                    sql.append(column).append(",");
                     // 转换数据
                     Class<?> type = field.getType();
                     if (type == Integer.TYPE)
                         args.add(field.getInt(object));
                     else if (type == Long.TYPE)
                         args.add(field.getLong(object));
-                    else if (type == Float.TYPE)
-                        args.add(field.getFloat(object));
-                    else if (type == Double.TYPE)
+                    else if (type == Float.TYPE) {
+                        float value = field.getFloat(object);
+                        // 对Float类型的转换是直接强转Number类型，然后获取double值的，这样转换直接由四个字节转八个字节，补位会使的float数值精度丢失
+                        args.add(Double.valueOf(String.valueOf(value)));
+                    } else if (type == Double.TYPE)
                         args.add(field.getDouble(object));
                     else if (type == Boolean.TYPE) // 0 true 1 false
                         args.add(field.getBoolean(object) ? 0 : 1);
@@ -134,11 +138,12 @@ public class TableEntity {
                         args.add(field.get(object));
                 }
             }
-            sql.append(" values(");
+            sql.replace(sql.length() - 1, sql.length(), ") ");
+            sql.append("values(");
             int size = args.size();
             for (int i = 0; i < size; ++i) {
                 if (i == size - 1)
-                    sql.append(")");
+                    sql.append("?)");
                 else
                     sql.append("?,");
             }
