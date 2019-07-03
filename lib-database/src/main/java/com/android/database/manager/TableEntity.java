@@ -4,6 +4,8 @@ import com.android.database.annotation.Column;
 import com.android.database.annotation.Table;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +19,7 @@ public class TableEntity {
     /**
      * 创建表结构
      *
-     * @param clazz 表结构实例对象
+     * @param clazz 表结构实例Class对象
      */
     public static String getTableColumn(Class<?> clazz) {
         //  获取表名称
@@ -96,8 +98,6 @@ public class TableEntity {
         }
     }
 
-
-    //  insert into message (msg_title,msg_content,msg_status) values(?,?,?), new Object[]{title, content, i}
     public static Object[] insertTableEntity(Object object) {
         Object[] sqlInfo = new Object[2];
         try {
@@ -150,5 +150,32 @@ public class TableEntity {
         return sqlInfo;
     }
 
+    /**
+     * 转换类型
+     * 等价于 Type type = new TypeToken<List<T>>() {}.getType();
+     *
+     * @param clazz 实例Class对象
+     */
+    public static Type getWrapperType(final Class clazz) {
+        Type wrapperType = new ParameterizedType() {
+            @Override
+            public Type[] getActualTypeArguments() {
+                Type[] types = new Type[1];
+                types[0] = clazz;
+                return types;
+            }
+
+            @Override
+            public Type getRawType() {
+                return List.class;
+            }
+
+            @Override
+            public Type getOwnerType() {
+                return List.class;
+            }
+        };
+        return wrapperType;
+    }
 
 }
