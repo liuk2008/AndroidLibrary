@@ -27,7 +27,10 @@ Android演示项目
 
 **plugin-viewinject**
 
-    * 此插件需结合 viewinject 注解工具使用，主要解决主项目中 manifest packageName 和 applicationId 不一致时，无法查找控件id问题
-    * 1、定义 Gradle Plugin 插件，注册 Transform，同时获取 manifest packageName
-    * 2、根据指定的 packageName，获取 Transform 输出的 R.class
-    * 3、读取 R.class 中内部类 id.class，生成 Id.class，输出到指定的文件路径
+    * 此插件需结合 viewinject 注解工具使用，主要解决：
+      1、主项目中 manifest packageName 和 applicationId 不一致时，无法查找控件id问题
+      2、lib包无法石永红viewinject工具
+    * 执行步骤：
+      1、定义 Gradle Plugin 插件，注册 Transform，同时获取 manifest packageName
+      2、根据指定的 packageName，获取 Transform 输出的 R.class
+      3、读取 R.class 中内部类 id.class，生成 Id.class，输出到指定的文件路径
