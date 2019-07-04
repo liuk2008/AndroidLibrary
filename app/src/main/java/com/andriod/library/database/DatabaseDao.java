@@ -84,8 +84,11 @@ public class DatabaseDao {
             }
             dbManager.insert(userInfo);
         }
+        int count = dbManager.queryCount("userinfo");
+        Log.d(TAG, "userinfo count: " + count);
+
         List<UserInfo> list = dbManager.queryEntity("select * from userinfo", null, UserInfo.class);
-        for (int i = 0; i < list.size(); i++) {
+        for (int i = 0; i < 10; i++) {
             UserInfo user = list.get(i);
             Log.d(TAG, "userInfo: " + user);
         }
@@ -96,8 +99,12 @@ public class DatabaseDao {
             dbManager.insert("insert into message(msg_title,msg_content,msg_status) values(?,?,?)",
                     new Object[]{"title" + i, "content" + i, i});
         }
-        List<MsgInfo> list = dbManager.queryData("select * from message", null, MsgInfo.class);
-        for (int i = 0; i < list.size(); i++) {
+        int count = dbManager.queryCount("message");
+        Log.d(TAG, "message count: " + count);
+
+        List<MsgInfo> list = dbManager.queryData("select msg_title from message", null, MsgInfo.class);
+        Log.d(TAG, "message list: " + list.size());
+        for (int i = 0; i < 10; i++) {
             MsgInfo msgInfo = list.get(i);
             Log.d(TAG, "msgInfo: " + msgInfo);
         }

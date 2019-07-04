@@ -8,6 +8,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 
 import com.andriod.library.database.DatabaseDao;
+import com.android.common.webview.WebViewHelper;
+import com.android.common.webview.client.CookieUtil;
+import com.android.common.webview.client.WebViewUtils;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -29,20 +32,14 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        // WebView使用demo
-//        WebViewHelper webViewHelper = WebViewHelper.create(this);
-//        setContentView(webViewHelper.getRootView());
-//        webViewHelper.initClient();
-//        CookieUtil.setCookie(".lawcert.com", "token", "123");
-//        WebViewUtils.setCookie("platform", "finance");
-//        WebViewUtils.setCookie("channel", "official");
-//        WebViewUtils.setHeader("version", "1.3.0.0");
-//        webViewHelper.load("https://jrhelp.lawcert.com/trc_app/disclosure/about");
-
-        // database使用demo
-//        DatabaseDao dao = DatabaseDao.getInstance();
-//        dao.init(getApplicationContext());
-//        dao.testMsgInfo();
-//        dao.testUserInfo();
     }
+
+
+    private void testDatabase() {
+        DatabaseDao dao = DatabaseDao.getInstance();
+        dao.init(getApplicationContext());
+        dao.testMsgInfo();
+        dao.testUserInfo();
+    }
+
 }

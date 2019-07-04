@@ -32,7 +32,6 @@
 	     1、getFromAssets：从assets中加载文件
 	     2、injectJs、excJsMethod、evaluateJs、addJavascriptInterface：与js相关的方法
 	     3、showPicWindow、setWebViewPic：调用本地拍照、图库等功能，向WebView传递文件
-	     4、增加js文件，注入到h5页面，关联本地方法与js方法，实现点击图片放大、缩小、长按等功能
 	* 注意：使用WebView时存在内存泄漏问题
 
 **utils包**
