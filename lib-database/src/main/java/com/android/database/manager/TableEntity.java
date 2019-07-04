@@ -23,6 +23,7 @@ public class TableEntity {
      * 创建表结构
      *
      * @param clazz 表结构实例Class对象
+     * @return 返回sql语句
      */
     public static String getTableColumn(Class<?> clazz) {
         //  获取表名称
@@ -79,18 +80,18 @@ public class TableEntity {
                     String column = annotation.name();
                     int columnIndex = cursor.getColumnIndex(column);
                     Class<?> type = field.getType();
-                    if (type == Integer.TYPE)
-                        field.setInt(t, cursor.getInt(columnIndex));
-                    else if (type == Long.TYPE)
-                        field.setLong(t, cursor.getLong(columnIndex));
+                    if (type == Integer.TYPE) {
+                        field.setInt(t, columnIndex != -1 ? cursor.getInt(columnIndex) : 0);
+                    } else if (type == Long.TYPE)
+                        field.setLong(t, columnIndex != -1 ? cursor.getLong(columnIndex) : 0);
                     else if (type == Float.TYPE)
-                        field.setFloat(t, cursor.getFloat(columnIndex));
+                        field.setFloat(t, columnIndex != -1 ? cursor.getFloat(columnIndex) : 0.0f);
                     else if (type == Double.TYPE)
-                        field.setDouble(t, cursor.getDouble(columnIndex));
-                    else if (type == Boolean.TYPE) {// 0 true 1 false
-                        field.setBoolean(t, cursor.getInt(columnIndex) == 0);
+                        field.setDouble(t, columnIndex != -1 ? cursor.getDouble(columnIndex) : 0.0);
+                    else if (type == Boolean.TYPE) { // 0 true 1 false
+                        field.setBoolean(t, (columnIndex != -1) && cursor.getInt(columnIndex) == 0);
                     } else
-                        field.set(t, cursor.getString(columnIndex));
+                        field.set(t, columnIndex != -1 ? cursor.getString(columnIndex) : null);
                 }
             }
         } catch (Exception e) {
@@ -157,7 +158,6 @@ public class TableEntity {
 
     /**
      * 转换类型
-     * 等价于 Type type = new TypeToken<List<T>>() {}.getType();
      *
      * @param clazz 实例Class对象
      */

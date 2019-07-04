@@ -51,12 +51,17 @@ public class DatabaseManager {
         return dbManager;
     }
 
-
     //============================操作数据库============================
 
     /**
      * 查询数据
      * 使用实例对象创建表结构时使用此方法查询数据
+     *
+     * @param sql   sql 语句
+     * @param args  sql 参数
+     * @param clazz 实例Class对象
+     * @param <T>   数据模型
+     * @return 数据集合
      */
     public <T> List<T> queryEntity(final String sql, final String[] args, final Class<T> clazz) {
         List<T> data = new ArrayList<>();
@@ -105,6 +110,12 @@ public class DatabaseManager {
     /**
      * 查询数据
      * 使用sql创建表结构时使用此方法查询数据
+     *
+     * @param sql   sql 语句
+     * @param args  sql 参数
+     * @param clazz 实例Class对象
+     * @param <T>   数据模型
+     * @return 数据集合
      */
     public <T> List<T> queryData(final String sql, final String[] args, Class<T> clazz) {
         List<Map<String, Object>> data = new ArrayList<>();
@@ -121,7 +132,7 @@ public class DatabaseManager {
                     if (cursor != null) {
                         while (cursor.moveToNext()) {
                             HashMap<String, Object> hashMap = new HashMap<>();
-                            for (int i = 1; i < cursor.getColumnCount(); i++) {
+                            for (int i = 0; i < cursor.getColumnCount(); i++) {
                                 int type = cursor.getType(i);
                                 String name = cursor.getColumnName(i);
                                 if (type == Cursor.FIELD_TYPE_INTEGER) {
@@ -167,6 +178,53 @@ public class DatabaseManager {
     }
 
     /**
+     * 查询数据量
+     *
+     * @param tableName 表名
+     * @return 数据量
+     */
+    public int queryCount(final String tableName) {
+        int status = OnCompleteListener.FAIL;
+        int count = 0;
+        Future<Integer> future = executor.submit(new Callable<Integer>() {
+            @Override
+            public Integer call() {
+                // 注意开启事务
+                Log.d(TAG, "--> query start");
+                int sum = 0;
+                Cursor cursor = null;
+                try {
+                    cursor = database.rawQuery("select count(*) from " + tableName, null);
+                    if (cursor != null) {
+                        while (cursor.moveToNext()) {
+                            sum = cursor.getInt(0);
+                        }
+                    }
+                    Log.d(TAG, "--> query end");
+                } catch (Exception e) {
+                    Log.d(TAG, "--> query fail");
+                    e.printStackTrace();
+                } finally {
+                    if (cursor != null) {
+                        cursor.close();
+                        cursor = null;
+                    }
+                }
+                return sum;
+            }
+        });
+        try {
+            count = future.get();
+            status = OnCompleteListener.SUCCESS;
+        } catch (Exception e) {
+            Log.d(TAG, "--> query exception");
+            e.printStackTrace();
+        }
+        showStatus(QUERY, status);
+        return count;
+    }
+
+    /**
      * 插入数据
      *
      * @param object 实例对象
@@ -181,8 +239,8 @@ public class DatabaseManager {
     /**
      * 插入数据
      *
-     * @param sql  sql语句
-     * @param args 查询参数
+     * @param sql  sql 语句
+     * @param args sql 参数
      */
     public void insert(String sql, Object[] args) {
         execSql(sql, args, UPDATE);
@@ -191,8 +249,8 @@ public class DatabaseManager {
     /**
      * 更新数据
      *
-     * @param sql
-     * @param args 查询参数
+     * @param sql  sql 语句
+     * @param args sql 参数
      */
     public void update(String sql, Object[] args) {
         execSql(sql, args, UPDATE);
@@ -202,12 +260,19 @@ public class DatabaseManager {
      * 删除语句
      *
      * @param sql  sql 语句
-     * @param args 查询参数
+     * @param args sql 参数
      */
     public void delete(String sql, Object[] args) {
         execSql(sql, args, DELETE);
     }
 
+    /**
+     * 执行sql语句
+     *
+     * @param sql  sql 语句
+     * @param args sql 参数
+     * @param type 执行类型
+     */
     private void execSql(final String sql, final Object[] args, final String type) {
         Future<Object> future = executor.submit(new Callable<Object>() {
             @Override
@@ -236,7 +301,9 @@ public class DatabaseManager {
         }
     }
 
-    // 执行回调方法
+    /**
+     * 执行回调方法
+     */
     private void showStatus(String type, int status) {
         if (null != onCompleteListener) {
             if (QUERY.equals(type)) {
@@ -251,6 +318,9 @@ public class DatabaseManager {
         }
     }
 
+    /**
+     * 打开数据
+     */
     public void open() {
         Log.d(TAG, "open: " + database.isOpen());
         // 打开数据库
@@ -258,6 +328,9 @@ public class DatabaseManager {
             database = openHelper.getReadableDatabase();
     }
 
+    /**
+     * 关闭数据库
+     */
     public void close() {
         if (null != database)
             database.close();
