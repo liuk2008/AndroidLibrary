@@ -88,7 +88,7 @@ public class DatabaseDao {
         Log.d(TAG, "userinfo count: " + count);
 
         List<UserInfo> list = dbManager.queryEntity("select * from userinfo", null, UserInfo.class);
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < count; i++) {
             UserInfo user = list.get(i);
             Log.d(TAG, "userInfo: " + user);
         }
@@ -104,7 +104,7 @@ public class DatabaseDao {
 
         List<MsgInfo> list = dbManager.queryData("select msg_title from message", null, MsgInfo.class);
         Log.d(TAG, "message list: " + list.size());
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < count; i++) {
             MsgInfo msgInfo = list.get(i);
             Log.d(TAG, "msgInfo: " + msgInfo);
         }

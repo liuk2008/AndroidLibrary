@@ -27,7 +27,7 @@ public class TableEntity {
      */
     public static String getTableColumn(Class<?> clazz) {
         //  获取表名称
-        Table tableAnnotation = (Table) clazz.getAnnotation(Table.class);
+        Table tableAnnotation = clazz.getAnnotation(Table.class);
         if (tableAnnotation != null) {
             tableName = tableAnnotation.name();
         }
@@ -35,25 +35,25 @@ public class TableEntity {
         StringBuilder keys = new StringBuilder();
         StringBuilder columns = new StringBuilder();
         Field[] fields = clazz.getDeclaredFields();
-        for (int i = 0; i < fields.length; i++) {
-            Field field = fields[i];
+        for (Field field : fields) {
             Column annotation = field.getAnnotation(Column.class);
             if (annotation != null) {
                 Class<?> type = field.getType();
                 String column = annotation.name(); // 字段名称
+                columns.append(column).append(" ");
                 boolean primaryKey = annotation.primaryKey(); // 是否是主键
                 if (primaryKey) {
-                    keys.append(column + ",");
+                    keys.append(column).append(",");
                 }
                 // 组装Sql字段
                 if (type == Integer.TYPE || type == Long.TYPE) {
-                    columns.append(column + " integer,");
+                    columns.append("integer,");
                 } else if (type == Float.TYPE || type == Double.TYPE) {
-                    columns.append(column + " real,");
+                    columns.append("real,");
                 } else if (type == Boolean.TYPE) {
-                    columns.append(column + " integer,");
+                    columns.append("integer,");
                 } else {
-                    columns.append(column + " text,");
+                    columns.append("text,");
                 }
             }
         }
@@ -68,8 +68,8 @@ public class TableEntity {
      * 解析数据
      *
      * @param t      表结构实例对象
-     * @param cursor
-     * @param <T>
+     * @param cursor 数据库游标
+     * @param <T>    实例对象
      */
     public static <T> void getTableEntity(T t, Cursor cursor) {
         try {
@@ -103,7 +103,7 @@ public class TableEntity {
      * 转换sql语句
      *
      * @param object 实例对象
-     * @return
+     * @return sql语句
      */
 
     public static Object[] insertTableEntity(Object object) {

@@ -8,7 +8,7 @@ import java.io.File;
 
 /**
  * 数据库配置类
- * Created by liuk on 2019/6/3
+ * Created by LiuK on 2019/6/3
  */
 public class DatabaseConfig {
 
