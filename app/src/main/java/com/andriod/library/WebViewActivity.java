@@ -34,19 +34,18 @@ public class WebViewActivity extends AppCompatActivity {
 //        testFile();
     }
 
-
     /**
      * 测试 cookie和header
      */
     private void testCookie() {
-        CookieUtil.setCookie(".lawcert.com", "token", "123");
+        CookieUtil.setCookie("lawcert.com", "token", "123");
         WebViewUtils.setCookie("platform", "finance");
         WebViewUtils.setCookie("channel", "official");
         WebViewUtils.setHeader("version", "1.3.0.0");
         webViewHelper.load("https://jrhelp.lawcert.com/trc_app/disclosure/about");
 //        webViewHelper.load("https://h5.lawcert.com/trade/withdraw");
+//        webViewHelper.load("https://jrwx.lawcert.com/index");
     }
-
 
     /**
      * 测试js注入功能

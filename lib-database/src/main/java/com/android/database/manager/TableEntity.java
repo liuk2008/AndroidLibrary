@@ -80,17 +80,17 @@ public class TableEntity {
                     String column = annotation.name();
                     int columnIndex = cursor.getColumnIndex(column);
                     Class<?> type = field.getType();
-                    if (type == Integer.TYPE) {
+                    if (type == Integer.TYPE)
                         field.setInt(t, columnIndex != -1 ? cursor.getInt(columnIndex) : 0);
-                    } else if (type == Long.TYPE)
+                    else if (type == Long.TYPE)
                         field.setLong(t, columnIndex != -1 ? cursor.getLong(columnIndex) : 0);
                     else if (type == Float.TYPE)
                         field.setFloat(t, columnIndex != -1 ? cursor.getFloat(columnIndex) : 0.0f);
                     else if (type == Double.TYPE)
                         field.setDouble(t, columnIndex != -1 ? cursor.getDouble(columnIndex) : 0.0);
-                    else if (type == Boolean.TYPE) { // 0 true 1 false
+                    else if (type == Boolean.TYPE)  // 0 true 1 false
                         field.setBoolean(t, (columnIndex != -1) && cursor.getInt(columnIndex) == 0);
-                    } else
+                    else
                         field.set(t, columnIndex != -1 ? cursor.getString(columnIndex) : null);
                 }
             }
