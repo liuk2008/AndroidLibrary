@@ -4,7 +4,7 @@ package com.android.network.retrofit.interceptor;
 import android.content.Context;
 
 import com.android.network.NetStatus;
-import com.android.network.NetUtils;
+import com.android.network.utils.NetUtils;
 import com.android.network.error.ErrorException;
 import com.android.network.http.request.NetData;
 
