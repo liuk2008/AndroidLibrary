@@ -5,9 +5,11 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.network.NetStatus;
-import com.android.network.NetUtils;
 import com.android.network.http.request.HttpParams;
 import com.android.network.http.request.NetData;
+import com.android.network.utils.MyCookieManager;
+import com.android.network.utils.MyHeaderManager;
+import com.android.network.utils.NetUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -40,6 +42,7 @@ public class HttpEngine {
     private static HttpEngine httpEngine;
     private Context mContext;
     private HttpParams httpParams;
+    private MyCookieManager myCookieManager;
     private boolean mIsProxy = true;
 
     public static synchronized HttpEngine getInstance() {
@@ -51,6 +54,7 @@ public class HttpEngine {
 
     public void init(Context context) {
         mContext = context;
+        myCookieManager = MyCookieManager.getInstance();
     }
 
     public void isProxy(boolean isProxy) {
@@ -96,10 +100,7 @@ public class HttpEngine {
         if (null != data) return data;
         String url = httpParams.url;
         String params = addParameter(httpParams.params);
-        if (!TextUtils.isEmpty(params)) {
-            url = url + "?" + params;
-        }
-        return request(url, "", "GET");
+        return request(url, params, "GET");
     }
 
     /**
@@ -132,12 +133,18 @@ public class HttpEngine {
         String msg = "服务器访问异常";
         String result = "";
         try {
-            URL realUrl = new URL(url);
+            String realUrl = url;
+            // 设置Get请求参数
+            if ("GET".equalsIgnoreCase(requestMethod) && !TextUtils.isEmpty(params)) {
+                realUrl = url + "?" + params;
+            }
+            // 初始化URL
+            URL httpUrl = new URL(realUrl);
             // mIsProxy=true：可以使用代理，mIsProxy=false：禁止使用代理
             if (!mIsProxy)
-                connection = (HttpURLConnection) realUrl.openConnection(Proxy.NO_PROXY);
+                connection = (HttpURLConnection) httpUrl.openConnection(Proxy.NO_PROXY);
             else
-                connection = (HttpURLConnection) realUrl.openConnection();
+                connection = (HttpURLConnection) httpUrl.openConnection();
             // 设置连接主机超时
             connection.setConnectTimeout(NetStatus.Type.TIMEOUT_MILLISECONDS);
             // 设置从主机读取数据超时
@@ -154,29 +161,33 @@ public class HttpEngine {
             }
             connection.setRequestProperty("Response-Type", "json");
             // 设置自定义请求头
-            Map<String, String> headers = httpParams.headers;
-            for (String header : headers.keySet()) {
-                connection.setRequestProperty(header, headers.get(header));
+            Map<String, String> headers = MyHeaderManager.getInstance().getHeader();
+            if (headers.size() > 0) {
+                for (String header : headers.keySet()) {
+                    connection.setRequestProperty(header, headers.get(header));
+                }
             }
             // 设置cookie
-            connection.setRequestProperty("Cookie", httpParams.setCookie(mContext));
+            String cookie = myCookieManager.getRequestCookie(realUrl);
+            if (!TextUtils.isEmpty(cookie))
+                connection.setRequestProperty("Cookie", cookie);
             Log.d(TAG, "request: url = [" + url + "]");
             Log.d(TAG, "request: method = [" + requestMethod + "]");
             Log.d(TAG, "request: params = [" + params + "]");
             Map<String, List<String>> requestProperties = connection.getRequestProperties();
             for (String key : requestProperties.keySet()) {
                 StringBuilder sb = new StringBuilder();
-                sb.append("request: " + key + " = ");
+                sb.append("request: ").append(key).append(" = ");
                 List<String> values = requestProperties.get(key);
                 if (values != null && values.size() > 0) {
                     for (String value : values) {
-                        sb.append("[" + value + "]");
+                        sb.append("[").append(value).append("]");
                     }
                 }
                 Log.d(TAG, sb.toString());
             }
             // 设置POST方式
-            if ("POST".equals(requestMethod)) {
+            if ("POST".equalsIgnoreCase(requestMethod)) {
                 // Post请求不能使用缓存
                 connection.setUseCaches(false);
                 // 发送POST请求必须设置如下两行
@@ -198,19 +209,20 @@ public class HttpEngine {
             responseCode = connection.getResponseCode();
             Map<String, List<String>> headerFields = connection.getHeaderFields();
             for (String key : headerFields.keySet()) {
-                StringBuilder sb = new StringBuilder();
-                sb.append(TextUtils.isEmpty(key) ? "response: " : "response: " + key + " = ");
                 List<String> values = headerFields.get(key);
                 if (values != null && values.size() > 0) {
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(TextUtils.isEmpty(key) ? "response: " : "response: " + key + " = ");
                     for (String value : values) {
-                        sb.append("[" + value + "]");
+                        sb.append("[").append(value).append("]");
                     }
-                    // 存储cookie
-                    if ("Set-Cookie".equals(key)) {
-                        httpParams.getCookie(mContext, values);
-                    }
+                    Log.d(TAG, sb.toString());
                 }
-                Log.d(TAG, sb.toString());
+            }
+            // 存储cookie
+            List<String> cookies = headerFields.get("Set-Cookie");
+            if (cookies != null && cookies.size() > 0) {
+                myCookieManager.parseResponseCookie(realUrl, cookies);
             }
             if (responseCode == 200) {
                 is = connection.getInputStream();

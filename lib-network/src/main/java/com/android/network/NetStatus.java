@@ -31,8 +31,6 @@ public enum NetStatus {
         public static final int RETROFIT_DEFAULT_DATAWRAPPER = 0;
         public static final int RETROFIT_RXJAVA = 1;
         public static final int RETROFIT_RXJAVA_DATAWRAPPER = 2;
-        public static final String TOKEN_KEY = "token";
-        public static final String DOMAIN_KEY = "domain";
         public final static int TIMEOUT_MILLISECONDS = 15 * 1000;
     }
 

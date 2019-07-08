@@ -1,14 +1,9 @@
 package com.android.network.http.request;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
-import com.android.network.NetStatus;
-import com.android.network.utils.NetUtils;
-
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -53,22 +48,6 @@ public class HttpParams {
             return new HttpParams(this);
         }
 
-    }
-
-    // 解析字符串，获取cookie值
-    public void getCookie(Context mContext, List<String> cookies) {
-        for (String cookie : cookies) {
-            if (TextUtils.isEmpty(cookie)) return;
-            String[] splits = cookie.split(";");
-            for (String split : splits) {
-                split = split.trim();
-                String[] tokens = split.split("=");
-                if (NetStatus.Type.TOKEN_KEY.equalsIgnoreCase(tokens[0].trim())) {
-                    NetUtils.putString(mContext, NetStatus.Type.TOKEN_KEY, tokens[1].trim());
-                    break;
-                }
-            }
-        }
     }
 
 }

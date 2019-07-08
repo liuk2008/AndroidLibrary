@@ -48,7 +48,7 @@ public class MyOkHttpClient {
         // 设置请求头
         MyHttpHeaderInterceptor headerInterceptor = MyHttpHeaderInterceptor.getInstance(context);
         // 设置cookie
-        MyHttpCookieInterceptor cookieInterceptor = MyHttpCookieInterceptor.getInstance(context);
+        MyHttpCookieInterceptor cookieInterceptor = MyHttpCookieInterceptor.getInstance();
         // 设置缓存
         File cacheDir = new File(context.getCacheDir().getAbsolutePath(), "HttpCache");
         Cache cache = new Cache(cacheDir, 10 * 1024 * 1024);//缓存10m
