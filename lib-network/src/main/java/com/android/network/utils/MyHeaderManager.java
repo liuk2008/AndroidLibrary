@@ -11,18 +11,18 @@ import java.util.Map;
  * Header管理类
  * 对Http/Https请求进行Header的写入操作
  */
-public class HeaderManager {
+public class MyHeaderManager {
 
-    private static final String TAG = HeaderManager.class.getSimpleName();
-    private static HeaderManager headerManager;
+    private static final String TAG = MyHeaderManager.class.getSimpleName();
+    private static MyHeaderManager headerManager;
     private Map<String, String> headers = new HashMap<>();
 
-    private HeaderManager() {
+    private MyHeaderManager() {
     }
 
-    public static HeaderManager getInstance() {
+    public static MyHeaderManager getInstance() {
         if (headerManager == null)
-            headerManager = new HeaderManager();
+            headerManager = new MyHeaderManager();
         return headerManager;
     }
 
@@ -45,9 +45,9 @@ public class HeaderManager {
     }
 
     /**
-     * 清除cookie
+     * 清除header
      */
-    public void clearCookie() {
+    public void clearHeader() {
         headers.clear();
     }
 

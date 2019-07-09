@@ -38,11 +38,11 @@ import java.util.Map;
 public class HttpEngine {
     private final static String TAG = "http";
     private final static String ENCODE_TYPE = "utf-8";
-
     private static HttpEngine httpEngine;
     private Context mContext;
     private HttpParams httpParams;
     private MyCookieManager myCookieManager;
+    private MyHeaderManager myHeaderManager;
     private boolean mIsProxy = true;
 
     public static synchronized HttpEngine getInstance() {
@@ -55,6 +55,7 @@ public class HttpEngine {
     public void init(Context context) {
         mContext = context;
         myCookieManager = MyCookieManager.getInstance();
+        myHeaderManager = MyHeaderManager.getInstance();
     }
 
     public void isProxy(boolean isProxy) {
@@ -161,7 +162,7 @@ public class HttpEngine {
             }
             connection.setRequestProperty("Response-Type", "json");
             // 设置自定义请求头
-            Map<String, String> headers = MyHeaderManager.getInstance().getHeader();
+            Map<String, String> headers = myHeaderManager.getHeader();
             if (headers.size() > 0) {
                 for (String header : headers.keySet()) {
                     connection.setRequestProperty(header, headers.get(header));

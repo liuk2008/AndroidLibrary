@@ -2,11 +2,12 @@ package com.android.network.retrofit.interceptor;
 
 
 import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Build;
 
+import com.android.network.utils.MyHeaderManager;
+
 import java.io.IOException;
+import java.util.Map;
 
 import okhttp3.Interceptor;
 import okhttp3.Request;
@@ -18,11 +19,7 @@ import okhttp3.Response;
 public class MyHttpHeaderInterceptor implements Interceptor {
 
     private static final String TAG = MyHttpHeaderInterceptor.class.getSimpleName();
-    private static String deviceId = "known";
-    private static String osVersion;
     private static String userAgent;
-    private static String versionName;
-    private static int versionCode;
     private static MyHttpHeaderInterceptor instance;
 
     private MyHttpHeaderInterceptor(Context context) {
@@ -42,29 +39,25 @@ public class MyHttpHeaderInterceptor implements Interceptor {
     }
 
     private void init(Context context) {
-        try {
-            PackageManager pm = context.getPackageManager();
-            PackageInfo pi = pm.getPackageInfo(context.getPackageName(), PackageManager.GET_CONFIGURATIONS);
-            versionName = pi.versionName;
-            versionCode = pi.versionCode;
-            int screenWidth = context.getResources().getDisplayMetrics().widthPixels;
-            int screenHeight = context.getResources().getDisplayMetrics().heightPixels;
-            userAgent = "OS/android;"
-                    + "OSVersion/" + Build.VERSION.SDK_INT + ";"
-                    + "phoneBrand/" + Build.MANUFACTURER + ";"
-                    + "screenHeight/" + screenHeight + ";"
-                    + "screenWidth/" + screenWidth;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        int screenWidth = context.getResources().getDisplayMetrics().widthPixels;
+        int screenHeight = context.getResources().getDisplayMetrics().heightPixels;
+        userAgent = "OS/android;"
+                + "OSVersion/" + Build.VERSION.SDK_INT + ";"
+                + "phoneBrand/" + Build.MANUFACTURER + ";"
+                + "screenHeight/" + screenHeight + ";"
+                + "screenWidth/" + screenWidth;
     }
 
 
     private void configHeader(Request.Builder builder) {
         try {
             addHeader(builder, "user-agent", userAgent);
-            addHeader(builder, "versionName", versionName);//重要
-            addHeader(builder, "versionCode", versionCode);//重要
+            Map<String, String> headers = MyHeaderManager.getInstance().getHeader();
+            if (headers.size() > 0) {
+                for (String header : headers.keySet()) {
+                    addHeader(builder, header, headers.get(header));
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
