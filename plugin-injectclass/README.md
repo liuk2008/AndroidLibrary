@@ -1,6 +1,4 @@
-# AndroidDemo
-
-Android演示项目
+# AndroidLibrary #
 
 **自定义Android Gradle插件**
 
