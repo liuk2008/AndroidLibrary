@@ -131,8 +131,12 @@ public class HttpTask<T> extends AsyncTask<Void, Void, NetData> {
         return wrapperType;
     }
 
-    // 由于callback持有Activity/Fragment引用，设置为null防止内存泄漏
-    public void setCallback() {
+    /**
+     * 取消网络请求
+     */
+    public void cancel() {
+        cancel(true);
+        // 由于callback持有Activity/Fragment引用，设置为null防止内存泄漏
         mCallback = null;
     }
 
