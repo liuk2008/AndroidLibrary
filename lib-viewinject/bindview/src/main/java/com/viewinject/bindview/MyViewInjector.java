@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class MyViewInjector {
 
-    private static final String TAG = MyViewInjector.class.getSimpleName();
+    private static final String TAG = "MyViewInjector";
 
     private static final Map<String, ViewInjector> injectorMap = new HashMap<>();
 

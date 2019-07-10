@@ -41,7 +41,7 @@ import java.util.Vector;
  */
 public class CaptureActivity extends AppCompatActivity implements SurfaceHolder.Callback {
 
-    private static final String TAG = CaptureActivity.class.getSimpleName();
+    private static final String TAG = "CaptureActivity";
     private boolean playBeep;
     private boolean vibrate;
     private boolean hasSurface;
