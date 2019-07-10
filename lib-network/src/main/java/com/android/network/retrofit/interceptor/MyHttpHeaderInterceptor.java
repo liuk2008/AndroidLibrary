@@ -18,7 +18,7 @@ import okhttp3.Response;
  */
 public class MyHttpHeaderInterceptor implements Interceptor {
 
-    private static final String TAG = MyHttpHeaderInterceptor.class.getSimpleName();
+    private static final String TAG = "MyHttpHeaderInterceptor";
     private static String userAgent;
     private static MyHttpHeaderInterceptor instance;
 

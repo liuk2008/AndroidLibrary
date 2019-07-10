@@ -7,7 +7,7 @@ package com.android.network.header;
  */
 public class MyCookie {
 
-    private static final String TAG = MyCookie.class.getSimpleName();
+    private static final String TAG = "MyCookie";
     public String name, value, domain, path, version;
     private long expires = 253402300799999L, maxAge = -1L, size = 0;
     private boolean secure = false, httpOnly = false;

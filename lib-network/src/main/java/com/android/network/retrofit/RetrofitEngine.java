@@ -37,7 +37,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class RetrofitEngine {
 
-    private static final String TAG = RetrofitEngine.class.getSimpleName();
+    private static final String TAG = "RetrofitEngine";
     private static final String contentType = "application/json;charset=UTF-8";
     private static RetrofitEngine retrofitEngine;
     private OkHttpClient mOkHttpClient;

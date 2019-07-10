@@ -18,7 +18,7 @@ import retrofit2.Response;
  */
 public class CallAdapter<T> implements retrofit2.Callback<T> {
 
-    private static final String TAG = CallAdapter.class.getSimpleName();
+    private static final String TAG = "CallAdapter";
     private Callback<T> mCallback;
 
     public CallAdapter(Callback<T> callback) {

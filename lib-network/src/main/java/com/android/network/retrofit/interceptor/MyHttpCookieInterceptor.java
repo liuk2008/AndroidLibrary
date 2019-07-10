@@ -27,7 +27,7 @@ import okhttp3.HttpUrl;
  */
 public class MyHttpCookieInterceptor implements CookieJar {
 
-    private static final String TAG = MyHttpCookieInterceptor.class.getSimpleName();
+    private static final String TAG = "MyHttpCookieInterceptor";
     private static MyHttpCookieInterceptor instance;
     private MyCookieManager myCookieManager;
 

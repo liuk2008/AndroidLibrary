@@ -19,7 +19,7 @@ import okhttp3.Response;
  */
 
 public class MyHttpCacheInterceptor implements Interceptor {
-    private static final String TAG = MyHttpCacheInterceptor.class.getSimpleName();
+    private static final String TAG = "MyHttpCacheInterceptor";
     private Context context;
 
     public MyHttpCacheInterceptor(Context context) {

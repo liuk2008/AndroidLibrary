@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class MyCookieManager {
 
-    private static final String TAG = MyCookieManager.class.getSimpleName();
+    private static final String TAG = "MyCookieManager";
     private static MyCookieManager myCookieManager;
     private MyCookieJar myCookieJar;
     private boolean isSetCookie = true;

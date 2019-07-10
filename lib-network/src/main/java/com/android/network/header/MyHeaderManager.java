@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public class MyHeaderManager {
 
-    private static final String TAG = MyHeaderManager.class.getSimpleName();
+    private static final String TAG = "MyHeaderManager";
     private static MyHeaderManager headerManager;
     private Map<String, String> headers = new HashMap<>();
 

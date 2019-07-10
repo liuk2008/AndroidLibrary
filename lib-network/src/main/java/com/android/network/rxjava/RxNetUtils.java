@@ -23,7 +23,7 @@ import retrofit2.HttpException;
  */
 public class RxNetUtils {
 
-    private static final String TAG = RxNetUtils.class.getSimpleName();
+    private static final String TAG = "RxNetUtils";
 
     public static <T> Disposable subscribe(Observable<T> observable, final Callback<T> callback) {
         Disposable disposable = null;
