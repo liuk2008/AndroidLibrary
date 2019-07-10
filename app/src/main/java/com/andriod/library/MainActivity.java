@@ -1,39 +1,79 @@
 package com.andriod.library;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.util.Log;
 
 import com.andriod.library.database.DatabaseDao;
-import com.android.common.webview.WebViewHelper;
-import com.android.common.webview.client.CookieUtil;
-import com.android.common.webview.client.WebViewUtils;
+import com.andriod.library.network.HttpDemo;
+import com.andriod.library.network.RetrofitDemo;
+import com.android.network.header.MyCookie;
+import com.android.network.header.MyCookieJar;
+import com.android.network.header.MyCookieManager;
+import com.android.network.header.MyHeaderManager;
+import com.android.network.http.engine.HttpEngine;
+import com.android.network.retrofit.RetrofitEngine;
 
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    private String token = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // 动态申请权限
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ActivityCompat.checkSelfPermission(this,
-                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+        // 添加Header
+        MyHeaderManager myHeaderManager = MyHeaderManager.getInstance();
+        myHeaderManager.addHeader("version", "1.0");
+        myHeaderManager.addHeader("channel", "oppo");
+        // 添加Cookie
+        final MyCookieManager myCookieManager = MyCookieManager.getInstance();
+        myCookieManager.setMyCookieJar(new MyCookieJar() {
+            @Override
+            public List<MyCookie> cookieForRequest(String url) {
+                Log.d("cookie", "cookieForRequest: " + url);
+                MyCookie myCookie1 = new MyCookie.Builder().setName("version").setValue("1").setDomain(".lawcert.com").builder();
+                MyCookie myCookie2 = new MyCookie.Builder().setName("").setValue(null).setDomain(".lawcert.com").builder();
+                MyCookie myCookie3 = new MyCookie.Builder().setName("channel").setValue("oppo").builder();
+                List<MyCookie> myCookies = new ArrayList<>();
+                myCookies.add(myCookie1);
+                myCookies.add(myCookie2);
+                myCookies.add(myCookie3);
+                if (!TextUtils.isEmpty(token)) {
+                    MyCookie myCookie4 = new MyCookie.Builder().setName("token").setValue(token).builder();
+                    myCookies.add(myCookie4);
+                }
+                return myCookies;
             }
-            if (ActivityCompat.checkSelfPermission(this,
-                    android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-            }
-        }
 
+            @Override
+            public void cookieFromResponse(String url, List<MyCookie> myCookies) {
+                Log.d("cookie", "cookieFromResponse: " + url);
+                for (MyCookie myCookie : myCookies) {
+                    Log.d("cookie", "cookieFromResponse: " + myCookie);
+                    if ("token".equalsIgnoreCase(myCookie.name)) {
+                        token = myCookie.value;
+                    }
+                }
+            }
+        });
+        testDatabase();
     }
 
+
+    private void testHttp() {
+        HttpEngine.getInstance().init(getApplicationContext());
+        HttpDemo.userInfo();
+    }
+
+    private void testRetrofit() {
+        RetrofitEngine.getInstance().init(getApplicationContext());
+        RetrofitDemo.userInfo();
+    }
 
     private void testDatabase() {
         DatabaseDao dao = DatabaseDao.getInstance();

@@ -16,7 +16,7 @@ import java.util.List;
 
 public class DatabaseDao {
 
-    private static final String TAG = DatabaseDao.class.getSimpleName();
+    private static final String TAG = "DatabaseDao";
     private static DatabaseDao instance;
     private DatabaseManager dbManager;
 
