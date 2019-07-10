@@ -14,7 +14,7 @@ import android.widget.TextView;
  */
 public class MyViewHolder extends RecyclerView.ViewHolder {
 
-    private static final String TAG = MyViewHolder.class.getSimpleName();
+    private static final String TAG = "MyViewHolder";
     private View mConvertView;
     private SparseArray<View> mViews;
 

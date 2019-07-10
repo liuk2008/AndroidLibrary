@@ -27,7 +27,7 @@ import android.webkit.CookieManager;
  */
 public class CookieUtil {
 
-    private static final String TAG = CookieUtil.class.getSimpleName();
+    private static final String TAG = "CookieUtil";
 
     /**
      * @param url   WebView加载的url

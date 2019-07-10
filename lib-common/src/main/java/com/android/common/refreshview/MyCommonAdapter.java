@@ -13,7 +13,7 @@ import java.util.List;
 
 public abstract class MyCommonAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final String TAG = MyCommonAdapter.class.getSimpleName();
+    private static final String TAG = "MyCommonAdapter";
     private static final int FOOTER = -1;
     private List<T> dataList = new ArrayList<>();
 

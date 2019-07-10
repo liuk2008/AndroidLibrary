@@ -21,7 +21,7 @@ import java.util.List;
 
 public class SystemUtils {
 
-    private static final String TAG = SystemUtils.class.getSimpleName();
+    private static final String TAG = "SystemUtils";
 
     /**
      * 通过Service的类名来判断是否启动某个服务

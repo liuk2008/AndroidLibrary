@@ -45,8 +45,7 @@ import java.util.Map;
 
 public class WebViewHelper {
 
-    private static final String TAG = WebViewHelper.class.getSimpleName();
-
+    private static final String TAG = "WebViewHelper";
     private MyWebChromeClient webChromeClient;
     private MyWebViewClient webViewClient;
 

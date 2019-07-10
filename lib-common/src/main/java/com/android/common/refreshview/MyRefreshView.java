@@ -28,7 +28,7 @@ import com.android.common.R;
  */
 public class MyRefreshView extends LinearLayout {
 
-    private static final String TAG = MyRefreshView.class.getSimpleName();
+    private static final String TAG = "MyRefreshView";
     private static final int VIEW_LOADING = 0;
     private static final int VIEW_NO_DATA = 1;
     private static final int VIEW_ERROR = 2;

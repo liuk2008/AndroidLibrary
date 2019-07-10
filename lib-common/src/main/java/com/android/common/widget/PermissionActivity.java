@@ -31,7 +31,7 @@ import java.util.List;
  */
 public class PermissionActivity extends AppCompatActivity {
 
-    private static final String TAG = PermissionActivity.class.getSimpleName();
+    private static final String TAG = "PermissionActivity";
     private static final int REQUEST_PERMISSION = 1;
     private static final int REQUEST_PERMISSIONS = 2;
     private static final int PERMISSION_REQUEST_CODE = 1001;

@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.Locale;
 
 public class ThrowableConfigure {
-    private static final String TAG = ThrowableConfigure.class.getSimpleName();
+    private static final String TAG = "ThrowableConfigure";
 
     public static void init() {
         initExceptionManager();

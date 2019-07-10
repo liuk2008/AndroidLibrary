@@ -16,7 +16,7 @@ import java.util.Calendar;
 
 public class CardIdUtils {
 
-    private static final String TAG = CardIdUtils.class.getSimpleName();
+    private static final String TAG = "CardIdUtils";
 
     private static final String regex = "(\\d{17}[0-9a-zA-X])";
     /**

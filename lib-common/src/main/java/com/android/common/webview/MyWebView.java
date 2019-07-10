@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class MyWebView extends WebView {
 
-    private static final String TAG = MyWebView.class.getSimpleName();
+    private static final String TAG = "MyWebView";
 
     public MyWebView(Context context) {
         super(context);

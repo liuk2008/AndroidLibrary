@@ -12,7 +12,7 @@ import com.android.common.R;
 
 public class ToolbarUtil {
 
-    private static final String TAG = ToolbarUtil.class.getSimpleName();
+    private static final String TAG = "ToolbarUtil";
     private static final int BACKGROUND_RES = 0;
     private static final int BACKGROUND_COLOR = 1;
     private static final int TYPE_NORMAL = 0;

@@ -24,7 +24,7 @@ import java.util.List;
 
 public class ShakeInfoUtil {
 
-    private static final String TAG = ShakeInfoUtil.class.getSimpleName();
+    private static final String TAG = "ShakeInfoUtil";
     private static Activity currentActivity;
     private static boolean isInited;
     private static boolean isDialogShow;
