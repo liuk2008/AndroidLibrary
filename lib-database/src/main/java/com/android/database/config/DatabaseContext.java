@@ -20,7 +20,7 @@ import java.io.IOException;
  */
 public class DatabaseContext extends ContextWrapper {
 
-    private static final String TAG = DatabaseContext.class.getSimpleName();
+    private static final String TAG = "DatabaseContext";
     private File file; // SD卡上APP文件路径
 
     public DatabaseContext(Context context) {

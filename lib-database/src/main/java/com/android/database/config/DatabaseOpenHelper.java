@@ -11,7 +11,7 @@ import android.util.Log;
  */
 public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
-    private static final String TAG = DatabaseOpenHelper.class.getSimpleName();
+    private static final String TAG = "DatabaseOpenHelper";
     private DatabaseConfig dataConfig;
 
     public DatabaseOpenHelper(Context context, DatabaseConfig dataConfig) {

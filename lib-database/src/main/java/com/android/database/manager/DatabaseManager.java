@@ -26,7 +26,7 @@ import java.util.concurrent.Future;
  */
 public class DatabaseManager {
 
-    private static final String TAG = DatabaseManager.class.getSimpleName();
+    private static final String TAG = "DatabaseManager";
     private static final String QUERY = "query";
     private static final String INSERT = "insert";
     private static final String UPDATE = "update";

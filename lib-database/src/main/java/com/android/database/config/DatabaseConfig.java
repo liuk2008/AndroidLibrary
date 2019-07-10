@@ -12,7 +12,7 @@ import java.io.File;
  */
 public class DatabaseConfig {
 
-    private static final String TAG = DatabaseConfig.class.getSimpleName();
+    private static final String TAG = "DatabaseConfig";
     private File sdFile;
     private int dbVersion = 1;
     private String dbName = "", tableSql = "";

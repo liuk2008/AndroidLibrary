@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class TableEntity {
 
-    private static final String TAG = TableEntity.class.getSimpleName();
+    private static final String TAG = "TableEntity";
     private static String tableName = "temp";
 
     /**
