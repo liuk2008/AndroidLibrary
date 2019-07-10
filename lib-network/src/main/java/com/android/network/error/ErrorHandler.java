@@ -1,7 +1,7 @@
 package com.android.network.error;
 
 
-import com.android.network.NetStatus;
+import com.android.network.common.NetworkStatus;
 import com.google.gson.JsonSyntaxException;
 
 import java.net.SocketTimeoutException;
@@ -21,22 +21,22 @@ import retrofit2.Response;
 public class ErrorHandler {
 
     public static ErrorData handlerError(Throwable throwable) {
-        ErrorData data = new ErrorData();
-        data.setData(throwable.getMessage());
+        ErrorData errorData = new ErrorData();
+        errorData.setData(throwable.getMessage());
         if (throwable instanceof TimeoutException
                 || throwable instanceof SocketTimeoutException) {
-            data.setCode(NetStatus.NETWORK_SERVER_TIMEOUT.getErrorCode());
-            data.setMsg(NetStatus.NETWORK_SERVER_TIMEOUT.getErrorMessage());
+            errorData.setCode(NetworkStatus.NETWORK_SERVER_TIMEOUT.getErrorCode());
+            errorData.setMsg(NetworkStatus.NETWORK_SERVER_TIMEOUT.getErrorMessage());
         } else if (throwable instanceof JsonSyntaxException) {
-            data.setCode(NetStatus.NETWORK_JSON_EXCEPTION.getErrorCode());
-            data.setMsg(NetStatus.NETWORK_JSON_EXCEPTION.getErrorMessage());
+            errorData.setCode(NetworkStatus.NETWORK_JSON_EXCEPTION.getErrorCode());
+            errorData.setMsg(NetworkStatus.NETWORK_JSON_EXCEPTION.getErrorMessage());
         } else if (throwable instanceof ErrorException) { // 自定义异常
-            data.setCode(((ErrorException) throwable).getCode());
-            data.setMsg(throwable.getMessage());
-            data.setData("");
+            errorData.setCode(((ErrorException) throwable).getCode());
+            errorData.setMsg(throwable.getMessage());
+            errorData.setData("");
         } else if (throwable instanceof HttpException) { // 404、500 网络错误
-            data.setCode(NetStatus.NETWORK_HTTP_EXCEPTION.getErrorCode());
-            data.setMsg(NetStatus.NETWORK_HTTP_EXCEPTION.getErrorMessage());
+            errorData.setCode(NetworkStatus.NETWORK_HTTP_EXCEPTION.getErrorCode());
+            errorData.setMsg(NetworkStatus.NETWORK_HTTP_EXCEPTION.getErrorMessage());
             try {
                 // 业务层异常通过网络层抛出时，特殊处理
                 HttpException httpEx = (HttpException) throwable;
@@ -44,16 +44,16 @@ public class ErrorHandler {
                 ResponseBody responseBody = response.errorBody();
                 if (responseBody != null) {
                     String result = new String(responseBody.bytes());
-                    data.setData(result);
+                    errorData.setData(result);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
-            data.setCode(NetStatus.NETWORK_SERVER_EXCEPTION.getErrorCode());
-            data.setMsg(NetStatus.NETWORK_SERVER_EXCEPTION.getErrorMessage());
+            errorData.setCode(NetworkStatus.NETWORK_SERVER_EXCEPTION.getErrorCode());
+            errorData.setMsg(NetworkStatus.NETWORK_SERVER_EXCEPTION.getErrorMessage());
             throwable.printStackTrace();
         }
-        return data;
+        return errorData;
     }
 }

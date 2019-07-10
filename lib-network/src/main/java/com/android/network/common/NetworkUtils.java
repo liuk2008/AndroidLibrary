@@ -1,4 +1,4 @@
-package com.android.network.utils;
+package com.android.network.common;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -10,10 +10,10 @@ import android.os.Looper;
 import android.widget.Toast;
 
 /**
+ * 检测网络状态
  * Created by Administrator on 2016/12/5 0005.
  */
-
-public class NetUtils {
+public class NetworkUtils {
 
     /*
      * 判断网络是否连接

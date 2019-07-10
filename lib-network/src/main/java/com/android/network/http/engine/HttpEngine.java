@@ -4,12 +4,12 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.android.network.NetStatus;
+import com.android.network.common.MyCookieManager;
+import com.android.network.common.MyHeaderManager;
+import com.android.network.common.NetworkStatus;
+import com.android.network.common.NetworkUtils;
+import com.android.network.http.NetData;
 import com.android.network.http.request.HttpParams;
-import com.android.network.http.request.NetData;
-import com.android.network.utils.MyCookieManager;
-import com.android.network.utils.MyHeaderManager;
-import com.android.network.utils.NetUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -75,19 +75,21 @@ public class HttpEngine {
     private NetData checkNet() {
         if (null == mContext)
             throw new RuntimeException("未初始化 HttpEngine");
-        boolean isConnected = NetUtils.isNetConnected(mContext);
+        boolean isConnected = NetworkUtils.isNetConnected(mContext);
         if (!isConnected) {
-            NetData data = new NetData(NetStatus.NETWORK_DISCONNECTED.getErrorCode(),
-                    NetStatus.NETWORK_DISCONNECTED.getErrorMessage(), "");
-            NetUtils.showToast(mContext, NetStatus.NETWORK_DISCONNECTED.getErrorMessage());
-            return data;
+            NetData netData = new NetData();
+            netData.setCode(NetworkStatus.NETWORK_DISCONNECTED.getErrorCode());
+            netData.setMsg(NetworkStatus.NETWORK_DISCONNECTED.getErrorMessage());
+            NetworkUtils.showToast(mContext, NetworkStatus.NETWORK_DISCONNECTED.getErrorMessage());
+            return netData;
         }
-        boolean isValidated = NetUtils.isNetValidated(mContext);
+        boolean isValidated = NetworkUtils.isNetValidated(mContext);
         if (!isValidated) {
-            NetData data = new NetData(NetStatus.NETWORK_UNABLE.getErrorCode(),
-                    NetStatus.NETWORK_UNABLE.getErrorMessage(), "");
-            NetUtils.showToast(mContext, NetStatus.NETWORK_UNABLE.getErrorMessage());
-            return data;
+            NetData netData = new NetData();
+            netData.setCode(NetworkStatus.NETWORK_UNABLE.getErrorCode());
+            netData.setMsg(NetworkStatus.NETWORK_UNABLE.getErrorMessage());
+            NetworkUtils.showToast(mContext, NetworkStatus.NETWORK_UNABLE.getErrorMessage());
+            return netData;
         }
         return null;
     }
@@ -147,9 +149,9 @@ public class HttpEngine {
             else
                 connection = (HttpURLConnection) httpUrl.openConnection();
             // 设置连接主机超时
-            connection.setConnectTimeout(NetStatus.Type.TIMEOUT_MILLISECONDS);
+            connection.setConnectTimeout(NetworkStatus.Type.TIMEOUT_MILLISECONDS);
             // 设置从主机读取数据超时
-            connection.setReadTimeout(NetStatus.Type.TIMEOUT_MILLISECONDS);
+            connection.setReadTimeout(NetworkStatus.Type.TIMEOUT_MILLISECONDS);
             // 设置请求方式
             connection.setRequestMethod(requestMethod);
             connection.setRequestProperty("Accept", "application/json");
@@ -260,7 +262,10 @@ public class HttpEngine {
             }
         }
         Log.d(TAG, "response: result = [" + result + "]");
-        NetData data = new NetData(responseCode, msg, result);
+        NetData data = new NetData();
+        data.setCode(responseCode);
+        data.setMsg(msg);
+        data.setData(result);
         return data;
     }
 

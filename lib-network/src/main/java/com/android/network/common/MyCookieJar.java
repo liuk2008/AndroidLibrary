@@ -1,4 +1,4 @@
-package com.android.network.utils;
+package com.android.network.common;
 
 import java.util.List;
 

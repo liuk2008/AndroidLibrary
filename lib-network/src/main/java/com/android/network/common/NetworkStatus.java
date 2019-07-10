@@ -1,7 +1,9 @@
-package com.android.network;
+package com.android.network.common;
 
-
-public enum NetStatus {
+/**
+ * Http请求异常状态
+ */
+public enum NetworkStatus {
 
     NETWORK_DISCONNECTED(-1, "网络未连接"), // 网络未连接
     NETWORK_UNABLE(-2, "网络异常,请连接可用网络"), // 已连接网络，但是不可访问网络
@@ -13,7 +15,7 @@ public enum NetStatus {
     private String errorMessage;
     private int errorCode;
 
-    NetStatus(int errorCode, String errorMessage) {
+    NetworkStatus(int errorCode, String errorMessage) {
         this.errorCode = errorCode;
         this.errorMessage = errorMessage;
     }

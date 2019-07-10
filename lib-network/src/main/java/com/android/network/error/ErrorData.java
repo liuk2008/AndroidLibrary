@@ -3,7 +3,7 @@ package com.android.network.error;
 import java.io.Serializable;
 
 /**
- * 封装网络层数据
+ * 网络异常数据模型
  * Created by Administrator on 2018/4/10.
  */
 
@@ -14,28 +14,28 @@ public class ErrorData implements Serializable {
     private String msg;
     private String data;
 
-    public int getCode() {
-        return code;
-    }
-
     public void setCode(int code) {
         this.code = code;
-    }
-
-    public String getMsg() {
-        return msg;
     }
 
     public void setMsg(String msg) {
         this.msg = msg;
     }
 
-    public String getData() {
-        return data;
-    }
-
     public void setData(String data) {
         this.data = data;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public String getData() {
+        return data;
     }
 
     @Override

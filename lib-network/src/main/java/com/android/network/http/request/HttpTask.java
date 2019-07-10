@@ -5,14 +5,13 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
-
 import com.android.network.ApiResponse;
 import com.android.network.Null;
 import com.android.network.callback.Callback;
 import com.android.network.error.ErrorData;
 import com.android.network.error.ErrorHandler;
+import com.android.network.http.NetData;
 import com.android.network.http.engine.HttpEngine;
-import com.android.network.http.request.NetData;
 import com.google.gson.Gson;
 
 import java.lang.reflect.ParameterizedType;
@@ -39,7 +38,7 @@ public class HttpTask<T> extends AsyncTask<Void, Void, NetData> {
 
     @Override
     protected NetData doInBackground(Void... voids) {
-        NetData netData = new NetData(0, "", "");
+        NetData netData = new NetData();
         try {
             if (!isCancelled() && mCallback != null) {
                 //获得超类的泛型参数的实际类型

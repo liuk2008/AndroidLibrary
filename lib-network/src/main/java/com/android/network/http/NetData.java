@@ -1,24 +1,19 @@
-package com.android.network.http.request;
+package com.android.network.http;
 
 import java.io.Serializable;
 
 /**
- * 封装网络层数据
+ * 原生网络框架数据模型
+ * 1、解析业务层数据
+ * 2、解析网络异常数据
  * Created by Administrator on 2018/4/10.
  */
-
 public class NetData implements Serializable {
 
-    private static final long serialVersionUID = 835238407293265994L;
+    private static final long serialVersionUID = 835238407293265993L;
     private int code;
     private String msg;
     private String data;
-
-    public NetData(int code, String msg,String data) {
-        this.code = code;
-        this.msg = msg;
-        this.data = data;
-    }
 
     public int getCode() {
         return code;

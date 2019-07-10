@@ -1,8 +1,9 @@
-package com.android.network.utils;
+package com.android.network.common;
 
 
 /**
- * 设置cookie数据
+ * 创建Cookie
+ * 设置相关参数
  */
 public class MyCookie {
 

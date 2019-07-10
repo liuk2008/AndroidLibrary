@@ -3,7 +3,7 @@ package com.android.network.retrofit;
 
 import android.content.Context;
 
-import com.android.network.NetStatus;
+import com.android.network.common.NetworkStatus;
 import com.android.network.retrofit.converter.ConverterFactory;
 import com.android.network.retrofit.converter.DataConverterFactory;
 import com.android.network.retrofit.interceptor.MyOkHttpClient;
@@ -75,15 +75,15 @@ public class RetrofitEngine {
                 .baseUrl(url)
                 .client(mOkHttpClient);
         switch (type) {
-            case NetStatus.Type.RETROFIT_DEFAULT_DATAWRAPPER:
+            case NetworkStatus.Type.RETROFIT_DEFAULT_DATAWRAPPER:
                 client.addConverterFactory(new DataConverterFactory<>());
                 break;
-            case NetStatus.Type.RETROFIT_RXJAVA:
+            case NetworkStatus.Type.RETROFIT_RXJAVA:
                 client.addConverterFactory(new ConverterFactory<>());  // 必须设置在 Gson 转换之前
                 client.addCallAdapterFactory(RxJava2CallAdapterFactory.create());
                 client.addConverterFactory(GsonConverterFactory.create());
                 break;
-            case NetStatus.Type.RETROFIT_RXJAVA_DATAWRAPPER:
+            case NetworkStatus.Type.RETROFIT_RXJAVA_DATAWRAPPER:
                 client.addConverterFactory(new DataConverterFactory<>());
                 client.addCallAdapterFactory(RxJava2CallAdapterFactory.create());
                 break;

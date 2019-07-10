@@ -3,9 +3,9 @@ package com.android.network.retrofit.interceptor;
 
 import android.text.TextUtils;
 
-import com.android.network.utils.MyCookie;
-import com.android.network.utils.MyCookieJar;
-import com.android.network.utils.MyCookieManager;
+import com.android.network.common.MyCookie;
+import com.android.network.common.MyCookieJar;
+import com.android.network.common.MyCookieManager;
 
 import java.util.ArrayList;
 import java.util.List;

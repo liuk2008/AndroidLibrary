@@ -3,10 +3,9 @@ package com.android.network.retrofit.interceptor;
 
 import android.content.Context;
 
-import com.android.network.NetStatus;
-import com.android.network.utils.NetUtils;
+import com.android.network.common.NetworkStatus;
+import com.android.network.common.NetworkUtils;
 import com.android.network.error.ErrorException;
-import com.android.network.http.request.NetData;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,9 +54,9 @@ public class MyOkHttpClient {
         MyHttpCacheInterceptor cacheInterceptor = new MyHttpCacheInterceptor(context);
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
-        builder.connectTimeout(NetStatus.Type.TIMEOUT_MILLISECONDS, TimeUnit.MILLISECONDS)
-                .writeTimeout(NetStatus.Type.TIMEOUT_MILLISECONDS, TimeUnit.MILLISECONDS)
-                .readTimeout(NetStatus.Type.TIMEOUT_MILLISECONDS, TimeUnit.MILLISECONDS)
+        builder.connectTimeout(NetworkStatus.Type.TIMEOUT_MILLISECONDS, TimeUnit.MILLISECONDS)
+                .writeTimeout(NetworkStatus.Type.TIMEOUT_MILLISECONDS, TimeUnit.MILLISECONDS)
+                .readTimeout(NetworkStatus.Type.TIMEOUT_MILLISECONDS, TimeUnit.MILLISECONDS)
                 .retryOnConnectionFailure(false) // 禁止重新连接
                 .cookieJar(cookieInterceptor) // 设置cookie
 //                .connectionPool(new ConnectionPool(0, 1, TimeUnit.SECONDS))
@@ -66,7 +65,7 @@ public class MyOkHttpClient {
                 .addInterceptor(new Interceptor() {
                     @Override
                     public Response intercept(Chain chain) throws IOException {
-                        NetData data = checkNet(context);
+                        NetworkData data = checkNet(context);
                         if (null != data) {
                             throw new ErrorException(data.getCode(), data.getMsg());
                         } else {
@@ -88,19 +87,19 @@ public class MyOkHttpClient {
      * 1、是否连接网络
      * 2、已连接网络，是否可正常访问网络
      */
-    private static NetData checkNet(Context context) {
-        boolean isConnected = NetUtils.isNetConnected(context);
+    private static NetworkData checkNet(Context context) {
+        boolean isConnected = NetworkUtils.isNetConnected(context);
         if (!isConnected) {
-            NetData data = new NetData(NetStatus.NETWORK_DISCONNECTED.getErrorCode(),
-                    NetStatus.NETWORK_DISCONNECTED.getErrorMessage(), "");
-            NetUtils.showToast(context, NetStatus.NETWORK_DISCONNECTED.getErrorMessage());
+            NetworkData data = new NetworkData(NetworkStatus.NETWORK_DISCONNECTED.getErrorCode(),
+                    NetworkStatus.NETWORK_DISCONNECTED.getErrorMessage(), "");
+            NetworkUtils.showToast(context, NetworkStatus.NETWORK_DISCONNECTED.getErrorMessage());
             return data;
         }
-        boolean isValidated = NetUtils.isNetValidated(context);
+        boolean isValidated = NetworkUtils.isNetValidated(context);
         if (!isValidated) {
-            NetData data = new NetData(NetStatus.NETWORK_UNABLE.getErrorCode(),
-                    NetStatus.NETWORK_UNABLE.getErrorMessage(), "");
-            NetUtils.showToast(context, NetStatus.NETWORK_UNABLE.getErrorMessage());
+            NetworkData data = new NetworkData(NetworkStatus.NETWORK_UNABLE.getErrorCode(),
+                    NetworkStatus.NETWORK_UNABLE.getErrorMessage(), "");
+            NetworkUtils.showToast(context, NetworkStatus.NETWORK_UNABLE.getErrorMessage());
             return data;
         }
         return null;
