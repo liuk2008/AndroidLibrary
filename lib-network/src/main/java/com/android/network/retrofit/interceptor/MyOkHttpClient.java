@@ -3,9 +3,10 @@ package com.android.network.retrofit.interceptor;
 
 import android.content.Context;
 
-import com.android.network.common.NetworkStatus;
-import com.android.network.common.NetworkUtils;
+import com.android.network.error.ErrorData;
 import com.android.network.error.ErrorException;
+import com.android.network.network.NetworkStatus;
+import com.android.network.network.NetworkUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -65,9 +66,9 @@ public class MyOkHttpClient {
                 .addInterceptor(new Interceptor() {
                     @Override
                     public Response intercept(Chain chain) throws IOException {
-                        NetworkData data = checkNet(context);
-                        if (null != data) {
-                            throw new ErrorException(data.getCode(), data.getMsg());
+                        ErrorData errorData = NetworkUtils.checkNet(context);
+                        if (null != errorData) {
+                            throw new ErrorException(errorData.getCode(), errorData.getMsg());
                         } else {
                             return chain.proceed(chain.request());
                         }
@@ -80,29 +81,6 @@ public class MyOkHttpClient {
         if (!mIsProxy)
             builder.proxy(Proxy.NO_PROXY);
         instance = builder.build();
-    }
-
-    /**
-     * 检测网络状态
-     * 1、是否连接网络
-     * 2、已连接网络，是否可正常访问网络
-     */
-    private static NetworkData checkNet(Context context) {
-        boolean isConnected = NetworkUtils.isNetConnected(context);
-        if (!isConnected) {
-            NetworkData data = new NetworkData(NetworkStatus.NETWORK_DISCONNECTED.getErrorCode(),
-                    NetworkStatus.NETWORK_DISCONNECTED.getErrorMessage(), "");
-            NetworkUtils.showToast(context, NetworkStatus.NETWORK_DISCONNECTED.getErrorMessage());
-            return data;
-        }
-        boolean isValidated = NetworkUtils.isNetValidated(context);
-        if (!isValidated) {
-            NetworkData data = new NetworkData(NetworkStatus.NETWORK_UNABLE.getErrorCode(),
-                    NetworkStatus.NETWORK_UNABLE.getErrorMessage(), "");
-            NetworkUtils.showToast(context, NetworkStatus.NETWORK_UNABLE.getErrorMessage());
-            return data;
-        }
-        return null;
     }
 
     public static void isProxy(boolean isProxy) {

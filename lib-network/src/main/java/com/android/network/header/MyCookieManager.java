@@ -1,4 +1,4 @@
-package com.android.network.common;
+package com.android.network.header;
 
 
 import android.net.Uri;
@@ -40,6 +40,7 @@ public class MyCookieManager {
             this.myCookieJar = myCookieJar;
         }
     }
+
     public MyCookieJar getMyCookieJar() {
         return myCookieJar;
     }
@@ -133,7 +134,7 @@ public class MyCookieManager {
     /**
      * 校验domain
      *
-     * @param url    请求的url地址
+     * @param url      请求的url地址
      * @param myCookie 设置的cookie
      * @return 是否匹配
      */
@@ -158,6 +159,7 @@ public class MyCookieManager {
     /**
      * 校验path
      * // https://passport.lawcert.com/proxy/account/user/login
+     *
      * @param url
      * @param path
      * @return
@@ -166,9 +168,7 @@ public class MyCookieManager {
         if (TextUtils.isEmpty(path)) return true;
         if (!path.startsWith("/"))
             throw new IllegalArgumentException("path must start with '/'");
-        if ("/".equalsIgnoreCase(path))
-            return true;
-        return false;
+        return "/".equalsIgnoreCase(path);
     }
 
 }

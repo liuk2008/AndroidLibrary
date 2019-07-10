@@ -1,4 +1,4 @@
-package com.android.network.common;
+package com.android.network.network;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -9,11 +9,38 @@ import android.os.Handler;
 import android.os.Looper;
 import android.widget.Toast;
 
+import com.android.network.error.ErrorData;
+
 /**
  * 检测网络状态
  * Created by Administrator on 2016/12/5 0005.
  */
 public class NetworkUtils {
+
+    /**
+     * 检测网络状态
+     * 1、是否连接网络
+     * 2、已连接网络，是否可正常访问网络
+     */
+    public static ErrorData checkNet(Context context) {
+        boolean isConnected = isNetConnected(context);
+        if (!isConnected) {
+            ErrorData errorData = new ErrorData();
+            errorData.setCode(NetworkStatus.NETWORK_DISCONNECTED.getErrorCode());
+            errorData.setMsg(NetworkStatus.NETWORK_DISCONNECTED.getErrorMessage());
+            showToast(context, NetworkStatus.NETWORK_DISCONNECTED.getErrorMessage());
+            return errorData;
+        }
+        boolean isValidated = isNetValidated(context);
+        if (!isValidated) {
+            ErrorData errorData = new ErrorData();
+            errorData.setCode(NetworkStatus.NETWORK_UNABLE.getErrorCode());
+            errorData.setMsg(NetworkStatus.NETWORK_UNABLE.getErrorMessage());
+            showToast(context, NetworkStatus.NETWORK_UNABLE.getErrorMessage());
+            return errorData;
+        }
+        return null;
+    }
 
     /*
      * 判断网络是否连接
@@ -77,4 +104,6 @@ public class NetworkUtils {
                 Context.MODE_PRIVATE);
         return sp.getString(key, defValue);
     }
+
+
 }

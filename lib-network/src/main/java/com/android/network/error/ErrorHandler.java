@@ -1,7 +1,7 @@
 package com.android.network.error;
 
 
-import com.android.network.common.NetworkStatus;
+import com.android.network.network.NetworkStatus;
 import com.google.gson.JsonSyntaxException;
 
 import java.net.SocketTimeoutException;

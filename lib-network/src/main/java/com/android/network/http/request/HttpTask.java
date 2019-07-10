@@ -19,7 +19,7 @@ import java.lang.reflect.Type;
 
 
 /**
- * http 请求异步任务
+ * 异步执行http/https请求任务
  */
 public class HttpTask<T> extends AsyncTask<Void, Void, NetData> {
 
@@ -41,7 +41,7 @@ public class HttpTask<T> extends AsyncTask<Void, Void, NetData> {
         NetData netData = new NetData();
         try {
             if (!isCancelled() && mCallback != null) {
-                //获得超类的泛型参数的实际类型
+                // 获得超类的泛型参数的实际类型
                 ParameterizedType parameterizedType = (ParameterizedType) mCallback.getClass().getGenericInterfaces()[0];
                 type = parameterizedType.getActualTypeArguments()[0];
                 wrapperType = getWrapperType();

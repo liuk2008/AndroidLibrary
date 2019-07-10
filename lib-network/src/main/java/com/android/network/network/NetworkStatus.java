@@ -1,4 +1,4 @@
-package com.android.network.common;
+package com.android.network.network;
 
 /**
  * Http请求异常状态

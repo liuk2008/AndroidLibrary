@@ -2,7 +2,6 @@ package com.android.network.http.request;
 
 import android.support.annotation.NonNull;
 
-
 import com.android.network.callback.Callback;
 
 import java.util.List;

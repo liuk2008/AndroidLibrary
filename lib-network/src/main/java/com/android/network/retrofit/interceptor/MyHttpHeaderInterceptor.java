@@ -4,7 +4,7 @@ package com.android.network.retrofit.interceptor;
 import android.content.Context;
 import android.os.Build;
 
-import com.android.network.common.MyHeaderManager;
+import com.android.network.header.MyHeaderManager;
 
 import java.io.IOException;
 import java.util.Map;

@@ -3,7 +3,7 @@ package com.android.network.retrofit;
 
 import android.content.Context;
 
-import com.android.network.common.NetworkStatus;
+import com.android.network.network.NetworkStatus;
 import com.android.network.retrofit.converter.ConverterFactory;
 import com.android.network.retrofit.converter.DataConverterFactory;
 import com.android.network.retrofit.interceptor.MyOkHttpClient;

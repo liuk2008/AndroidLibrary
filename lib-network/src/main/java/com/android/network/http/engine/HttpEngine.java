@@ -4,12 +4,13 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.android.network.common.MyCookieManager;
-import com.android.network.common.MyHeaderManager;
-import com.android.network.common.NetworkStatus;
-import com.android.network.common.NetworkUtils;
+import com.android.network.error.ErrorData;
+import com.android.network.header.MyCookieManager;
+import com.android.network.header.MyHeaderManager;
 import com.android.network.http.NetData;
 import com.android.network.http.request.HttpParams;
+import com.android.network.network.NetworkStatus;
+import com.android.network.network.NetworkUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -67,28 +68,15 @@ public class HttpEngine {
         this.httpParams = httpParams;
     }
 
-    /**
-     * 检测网络状态
-     * 1、是否连接网络
-     * 2、已连接网络，是否可正常访问网络
-     */
     private NetData checkNet() {
         if (null == mContext)
             throw new RuntimeException("未初始化 HttpEngine");
-        boolean isConnected = NetworkUtils.isNetConnected(mContext);
-        if (!isConnected) {
+        ErrorData errorData = NetworkUtils.checkNet(mContext);
+        if (null != errorData) {
             NetData netData = new NetData();
-            netData.setCode(NetworkStatus.NETWORK_DISCONNECTED.getErrorCode());
-            netData.setMsg(NetworkStatus.NETWORK_DISCONNECTED.getErrorMessage());
-            NetworkUtils.showToast(mContext, NetworkStatus.NETWORK_DISCONNECTED.getErrorMessage());
-            return netData;
-        }
-        boolean isValidated = NetworkUtils.isNetValidated(mContext);
-        if (!isValidated) {
-            NetData netData = new NetData();
-            netData.setCode(NetworkStatus.NETWORK_UNABLE.getErrorCode());
-            netData.setMsg(NetworkStatus.NETWORK_UNABLE.getErrorMessage());
-            NetworkUtils.showToast(mContext, NetworkStatus.NETWORK_UNABLE.getErrorMessage());
+            netData.setCode(errorData.getCode());
+            netData.setMsg(errorData.getMsg());
+            netData.setData(errorData.getData());
             return netData;
         }
         return null;
@@ -99,8 +87,8 @@ public class HttpEngine {
      * 请求参数赋值在url
      */
     public NetData doGet() throws Exception {
-        NetData data = checkNet();
-        if (null != data) return data;
+        NetData netData = checkNet();
+        if (netData != null) return netData;
         String url = httpParams.url;
         String params = addParameter(httpParams.params);
         return request(url, params, "GET");
@@ -112,8 +100,8 @@ public class HttpEngine {
      * 提交json数据不需要编码
      */
     public NetData doPost() throws Exception {
-        NetData data = checkNet();
-        if (null != data) return data;
+        NetData netData = checkNet();
+        if (netData != null) return netData;
         String url = httpParams.url;
         String params = "";
         if ("application/json".equals(httpParams.contentType)) {
