@@ -26,7 +26,7 @@ import retrofit2.Retrofit;
  * 1、处理无响应体的response
  * 2、捕获response，处理业务异常
  */
-public class DataConverterFactory extends Converter.Factory {
+public class DataConverterFactory<T> extends Converter.Factory {
     private static final String TAG = "DataConverterFactory";
 
     @Override

@@ -22,8 +22,10 @@ android {
     buildTypes {
         release {
             debuggable true
-            minifyEnabled true
+            minifyEnabled true                                          // 是否进行混淆
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            shrinkResources true                                         // 移除无用的resource文件
+            zipAlignEnabled true                                        // Zipalign优化
             signingConfig signingConfigs.release
         }
     }
@@ -44,5 +46,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation project(":lib-database")
     implementation project(":lib-common")
+    implementation project(":lib-network")
 
 }
