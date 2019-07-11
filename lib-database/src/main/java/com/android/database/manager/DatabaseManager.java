@@ -117,12 +117,12 @@ public class DatabaseManager {
      * @param <T>   数据模型
      * @return 数据集合
      */
-    public <T> List<T> queryData(final String sql, final String[] args, Class<T> clazz) {
-        List<Map<String, Object>> data = new ArrayList<>();
+    public <T> List<T> queryData(final String sql, final String[] args, final Class<T> clazz) {
+        final List<T> data = new ArrayList<>();
         int status = OnCompleteListener.FAIL;
-        Future<List<Map<String, Object>>> future = executor.submit(new Callable<List<Map<String, Object>>>() {
+        Future<List<T>> future = executor.submit(new Callable<List<T>>() {
             @Override
-            public List<Map<String, Object>> call() {
+            public List<T> call() {
                 // 注意开启事务
                 Log.d(TAG, "--> query start");
                 List<Map<String, Object>> list = new ArrayList<>();
@@ -159,11 +159,15 @@ public class DatabaseManager {
                         cursor = null;
                     }
                 }
-                return list;
+                // 异步解析数据
+                Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+                String json = gson.toJson(list);
+                Type type = TableEntity.getWrapperType(clazz);
+                return  gson.fromJson(json, type);
             }
         });
         try {
-            List<Map<String, Object>> list = future.get();
+            List<T> list = future.get();
             data.addAll(list); // 返回查询的数据
             status = OnCompleteListener.SUCCESS;
         } catch (Exception e) {
@@ -171,10 +175,7 @@ public class DatabaseManager {
             e.printStackTrace();
         }
         showStatus(QUERY, status);
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-        String json = gson.toJson(data);
-        Type type = TableEntity.getWrapperType(clazz);
-        return gson.fromJson(json, type);
+        return data;
     }
 
     /**

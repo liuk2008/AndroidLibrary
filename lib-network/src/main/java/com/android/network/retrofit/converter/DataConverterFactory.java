@@ -2,7 +2,6 @@ package com.android.network.retrofit.converter;
 
 import android.text.TextUtils;
 
-
 import com.android.network.ApiResponse;
 import com.android.network.Null;
 import com.android.network.error.ErrorException;
@@ -31,10 +30,11 @@ public class DataConverterFactory<T> extends Converter.Factory {
 
     @Override
     public Converter<ResponseBody, ?> responseBodyConverter(final Type type, final Annotation[] annotations, Retrofit retrofit) {
-
+        // 此处代码在主线程执行
         return new Converter<ResponseBody, Object>() {
             @Override
             public Object convert(ResponseBody body) throws IOException {
+                // 此处为异步操作
                 // 处理网络层200的情况下
                 if (body.contentLength() == 0) { // 转换无响应体的response
                     return Null.INSTANCE;
