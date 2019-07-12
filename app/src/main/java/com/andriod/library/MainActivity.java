@@ -61,7 +61,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        testDatabase();
+//        testDatabase();
+        testHttp();
     }
 
 

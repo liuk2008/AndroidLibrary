@@ -1,4 +1,4 @@
-package com.andriod.library.network.model;
+package com.andriod.library.network;
 
 import com.google.gson.annotations.SerializedName;
 

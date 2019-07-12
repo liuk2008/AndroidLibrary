@@ -3,8 +3,6 @@ package com.andriod.library.network;
 
 import android.util.Log;
 
-import com.andriod.library.network.model.AccountSummary;
-import com.andriod.library.network.model.User;
 import com.android.network.callback.Callback;
 import com.android.network.network.NetworkStatus;
 import com.android.network.retrofit.RetrofitEngine;

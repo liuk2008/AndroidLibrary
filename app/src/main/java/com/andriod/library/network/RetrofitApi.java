@@ -1,9 +1,6 @@
 package com.andriod.library.network;
 
 
-import com.andriod.library.network.model.AccountSummary;
-import com.andriod.library.network.model.User;
-
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
