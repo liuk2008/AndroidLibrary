@@ -2,7 +2,6 @@ package com.android.network.retrofit;
 
 import android.util.Log;
 
-
 import com.android.network.callback.Callback;
 import com.android.network.error.ErrorData;
 import com.android.network.error.ErrorHandler;
@@ -20,8 +19,10 @@ public class CallAdapter<T> implements retrofit2.Callback<T> {
 
     private static final String TAG = "CallAdapter";
     private Callback<T> mCallback;
+    private Call<T> mCall;
 
-    public CallAdapter(Callback<T> callback) {
+    public CallAdapter(Call<T> call, Callback<T> callback) {
+        mCall = call;
         mCallback = callback;
     }
 
@@ -31,7 +32,7 @@ public class CallAdapter<T> implements retrofit2.Callback<T> {
         if (response.isSuccessful()) { // 网络层200
             try {
                 T t = response.body(); // 注意 response 不能被解析的情况下，response.body()会返回null
-                mCallback.onSuccess(t);
+                if (mCallback != null) mCallback.onSuccess(t);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -43,7 +44,8 @@ public class CallAdapter<T> implements retrofit2.Callback<T> {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            mCallback.onFail(response.code(), "服务器访问异常", result);
+            if (mCallback != null)
+                mCallback.onFail(response.code(), "服务器访问异常", result);
         }
     }
 
@@ -51,7 +53,7 @@ public class CallAdapter<T> implements retrofit2.Callback<T> {
     @Override
     public void onFailure(Call<T> call, Throwable throwable) {
         throwable.printStackTrace();
-        if (!call.isCanceled()) {
+        if (!call.isCanceled() && mCallback != null) {
             ErrorData errorData = ErrorHandler.handlerError(throwable);
             mCallback.onFail(errorData.getCode(), errorData.getMsg(), errorData.getData());
         } else {
@@ -59,7 +61,9 @@ public class CallAdapter<T> implements retrofit2.Callback<T> {
         }
     }
 
-    public void setCallback() {
+    public void cancel() {
+        if (mCall != null && !mCall.isCanceled())
+            mCall.cancel();
         mCallback = null;
     }
 

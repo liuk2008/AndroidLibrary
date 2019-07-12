@@ -28,11 +28,13 @@ public class HttpUtils {
         return task;
     }
 
+    // 取消单个网络请求
     public static void cancelTask(@NonNull HttpTask task) {
-        if (!task.isCancelled())
+        if (task != null && !task.isCancelled())
             task.cancel();
     }
 
+    // 批量取消网络请求
     public static void cancelAll(@NonNull List<HttpTask> taskList) {
         if (taskList.size() <= 0) return;
         // 集合类添加元素后，将会持有元素对象的引用，导致该元素对象不能被垃圾回收，从而发生内存泄漏。
