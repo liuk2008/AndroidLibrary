@@ -21,6 +21,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private String token = "";
+    private RetrofitDemo retrofitDemo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,9 +63,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 //        testDatabase();
-        testHttp();
+        testRetrofit();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (retrofitDemo != null)
+            retrofitDemo.cancelAll();
+    }
 
     private void testHttp() {
         HttpEngine.getInstance().init(getApplicationContext());
@@ -73,7 +80,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void testRetrofit() {
         RetrofitEngine.getInstance().init(getApplicationContext());
-        RetrofitDemo.userInfo();
+        retrofitDemo = new RetrofitDemo();
+        retrofitDemo.userInfo();
     }
 
     private void testDatabase() {
