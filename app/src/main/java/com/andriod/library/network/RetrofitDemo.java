@@ -4,8 +4,6 @@ package com.andriod.library.network;
 import android.util.Log;
 
 import com.android.network.callback.Callback;
-import com.android.network.http.request.HttpTask;
-import com.android.network.http.request.HttpUtils;
 import com.android.network.network.NetworkStatus;
 import com.android.network.retrofit.CallAdapter;
 import com.android.network.retrofit.RetrofitEngine;
@@ -59,6 +57,16 @@ public class RetrofitDemo {
         });
         callList.add(callAdapter);
     }
+
+    public void financeList(int pageIndex, Callback<FinanceListInfo> callback) {
+        RetrofitApi financeApi = retrofitEngine.getRetrofitService(RetrofitApi.class,
+                "https://www.lawcert.com/proxy/",
+                NetworkStatus.Type.RETROFIT_DEFAULT_DATAWRAPPER);
+
+        Call<FinanceListInfo> call = financeApi.financeList(pageIndex, 40, "app");
+        RetrofitUtils.request(call, callback);
+    }
+
 
     public void cancelTask(CallAdapter callAdapter) {
         callList.remove(callAdapter);

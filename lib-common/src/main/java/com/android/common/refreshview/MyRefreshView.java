@@ -8,6 +8,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -71,15 +72,25 @@ public class MyRefreshView extends LinearLayout {
         errorView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isReload && onReLoadListener != null) {
-                    loadingView.setVisibility(VISIBLE);
-                    emptyView.setVisibility(GONE);
-                    errorView.setVisibility(GONE);
-                    setLoadMore(true);
-                    onReLoadListener.onReload();
-                }
+                if (myRefreshController != null)
+                    reload(0);
+                else if (onReLoadListener != null)
+                    reload(1);
             }
         });
+    }
+
+    private void reload(int type) {
+        if (isReload) {
+            loadingView.setVisibility(VISIBLE);
+            emptyView.setVisibility(GONE);
+            errorView.setVisibility(GONE);
+            setLoadMore(true);
+            if (type == 0)
+                myRefreshController.onReload();
+            else if (type == 1)
+                onReLoadListener.onReload();
+        }
     }
 
     private void setSwipeRefreshLayout() {
@@ -94,8 +105,12 @@ public class MyRefreshView extends LinearLayout {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (swipeRefreshLayout.isRefreshing() && onRefreshListener != null)
-                    onRefreshListener.onRefresh(); // 下拉刷新功能
+                if (swipeRefreshLayout.isRefreshing()) { // 下拉刷新功能
+                    if (myRefreshController != null)
+                        myRefreshController.onRefresh();
+                    else if (onRefreshListener != null)
+                        onRefreshListener.onRefresh();
+                }
             }
         });
     }
@@ -112,12 +127,11 @@ public class MyRefreshView extends LinearLayout {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                     if (layoutManager != null && layoutManager.findLastVisibleItemPosition() == (wrapAdapter.getItemCount() - 1)) {//最后一条可见
-                        if (!isLoading && isLoadMore && onLoadMoreListener != null) {
-                            isLoading = true; // 防止重复刷新
-                            wrapAdapter.loadMoreError(false);
-                            wrapAdapter.notifyDataSetChanged();
-                            onLoadMoreListener.onLoadMore(); // 上拉加载功能
-                        }
+                        // 上拉加载功能
+                        if (myRefreshController != null)
+                            onLoadMore(0);
+                        else if (onLoadMoreListener != null)
+                            onLoadMore(1);
                     }
                 }
             }
@@ -131,6 +145,18 @@ public class MyRefreshView extends LinearLayout {
                 }
             }
         });
+    }
+
+    private void onLoadMore(int type) {
+        if (!isLoading && isLoadMore) {
+            isLoading = true; // 防止重复刷新
+            wrapAdapter.loadMoreError(false);
+            wrapAdapter.notifyDataSetChanged();
+            if (type == 0)
+                myRefreshController.onLoadMore();
+            else if (type == 1)
+                onLoadMoreListener.onLoadMore();
+        }
     }
 
     /**
@@ -205,10 +231,20 @@ public class MyRefreshView extends LinearLayout {
             tvReload.setVisibility(isReload ? VISIBLE : GONE);
     }
 
+    private MyRefreshController myRefreshController;
     private OnRefreshListener onRefreshListener;
     private OnLoadMoreListener onLoadMoreListener;
     private OnReLoadListener onReLoadListener;
     private OnScrollChangeListener onScrollChangeListener;
+
+
+    public interface MyRefreshController {
+        void onRefresh();
+
+        void onLoadMore();
+
+        void onReload();
+    }
 
     public interface OnRefreshListener {
         void onRefresh();
@@ -224,6 +260,10 @@ public class MyRefreshView extends LinearLayout {
 
     public interface OnScrollChangeListener {
         void onScrollChange(RecyclerView recyclerView, int scrollX, int scrollY);
+    }
+
+    public void setMyRefreshController(MyRefreshController myRefreshController) {
+        this.myRefreshController = myRefreshController;
     }
 
     public void setOnRefreshListener(OnRefreshListener onRefreshListener) {
