@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.network.error.ErrorData;
+import com.android.network.header.MyCookie;
 import com.android.network.header.MyCookieManager;
 import com.android.network.header.MyHeaderManager;
 import com.android.network.http.NetData;
@@ -159,7 +160,15 @@ public class HttpEngine {
                 }
             }
             // 设置cookie
-            String cookie = myCookieManager.getRequestCookie(realUrl);
+            StringBuilder cookieBuilder = new StringBuilder();
+            List<MyCookie> myCookies = myCookieManager.matchRequestCookies(realUrl);
+            for (MyCookie myCookie : myCookies) {
+                cookieBuilder.append(myCookie.name)
+                        .append("=")
+                        .append(myCookie.value)
+                        .append(";");
+            }
+            String cookie = cookieBuilder.substring(0, cookieBuilder.length() - 1);
             if (!TextUtils.isEmpty(cookie))
                 connection.setRequestProperty("Cookie", cookie);
             Log.d(TAG, "request: url = [" + url + "]");

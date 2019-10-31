@@ -4,7 +4,6 @@ package com.android.network.retrofit.interceptor;
 import android.text.TextUtils;
 
 import com.android.network.header.MyCookie;
-import com.android.network.header.MyCookieJar;
 import com.android.network.header.MyCookieManager;
 
 import java.util.ArrayList;
@@ -47,30 +46,21 @@ public class MyHttpCookieInterceptor implements CookieJar {
         return instance;
     }
 
-
     // 设置RequestHeader中的cookie
     @Override
     public List<Cookie> loadForRequest(HttpUrl url) {
         List<Cookie> cookieList = new ArrayList<>();
-        if (!myCookieManager.isSetCookie()) return cookieList;
-        MyCookieJar myCookieJar = myCookieManager.getMyCookieJar();
-        if (null == myCookieJar) return cookieList;
-        List<MyCookie> myCookies = myCookieJar.cookieForRequest(url.toString());
+        List<MyCookie> myCookies = myCookieManager.matchRequestCookies(url.toString());
         if (myCookies == null || myCookies.size() <= 0) return cookieList;
         for (MyCookie myCookie : myCookies) {
-            if (TextUtils.isEmpty(myCookie.name) || TextUtils.isEmpty(myCookie.value))
-                continue;
-            boolean isMatch = myCookieManager.matchDomain(url.toString(), myCookie);
-            if (isMatch) {
-                Cookie.Builder builder = new Cookie.Builder();
-                builder.name(myCookie.name)
-                        .value(myCookie.value);
-                if (TextUtils.isEmpty(myCookie.domain))
-                    builder.domain(url.host());
-                else
-                    builder.domain(myCookie.domain);
-                cookieList.add(builder.build());
-            }
+            Cookie.Builder builder = new Cookie.Builder();
+            builder.name(myCookie.name)
+                    .value(myCookie.value);
+            if (TextUtils.isEmpty(myCookie.domain))
+                builder.domain(url.host());
+            else
+                builder.domain(myCookie.domain);
+            cookieList.add(builder.build());
         }
         return cookieList;
     }

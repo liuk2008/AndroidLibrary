@@ -32,18 +32,20 @@ public class MainActivity extends AppCompatActivity {
         myHeaderManager.addHeader("version", "1.0");
         myHeaderManager.addHeader("channel", "oppo");
         // 添加Cookie
-        final MyCookieManager myCookieManager = MyCookieManager.getInstance();
+        MyCookieManager myCookieManager = MyCookieManager.getInstance();
         myCookieManager.setMyCookieJar(new MyCookieJar() {
             @Override
             public List<MyCookie> cookieForRequest(String url) {
                 Log.d("cookie", "cookieForRequest: " + url);
-                MyCookie myCookie1 = new MyCookie.Builder().setName("version").setValue("1").setDomain(".lawcert.com").builder();
+                MyCookie myCookie1 = new MyCookie.Builder().setName("version").setValue("1.0").setDomain(".lawcert.com").builder();
                 MyCookie myCookie2 = new MyCookie.Builder().setName("").setValue(null).setDomain(".lawcert.com").builder();
-                MyCookie myCookie3 = new MyCookie.Builder().setName("channel").setValue("oppo").builder();
+                MyCookie myCookie3 = new MyCookie.Builder().setName("channel").setValue("huawei").setDomain("lawcert.com").builder();
+                MyCookie myCookie5 = new MyCookie.Builder().setName("test").setValue("oppo").setDomain("baidu.com").builder();
                 List<MyCookie> myCookies = new ArrayList<>();
                 myCookies.add(myCookie1);
                 myCookies.add(myCookie2);
                 myCookies.add(myCookie3);
+                myCookies.add(myCookie5);
                 if (!TextUtils.isEmpty(token)) {
                     MyCookie myCookie4 = new MyCookie.Builder().setName("token").setValue(token).builder();
                     myCookies.add(myCookie4);
@@ -63,7 +65,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 //        testDatabase();
-        testRetrofit();
+//        testRetrofit();
+        testHttp();
     }
 
     @Override

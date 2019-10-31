@@ -3,6 +3,7 @@ package com.android.network.header;
 
 import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,13 +37,7 @@ public class MyCookieManager {
     }
 
     public void setMyCookieJar(MyCookieJar myCookieJar) {
-        if (myCookieJar != null) {
-            this.myCookieJar = myCookieJar;
-        }
-    }
-
-    public MyCookieJar getMyCookieJar() {
-        return myCookieJar;
+        this.myCookieJar = myCookieJar;
     }
 
     /**
@@ -52,34 +47,32 @@ public class MyCookieManager {
         this.isSetCookie = isSetCookie;
     }
 
-    public boolean isSetCookie() {
-        return isSetCookie;
+    /**
+     * 校验设置的Request请求Cookie值
+     *
+     * @param url 请求url
+     * @return Cookie集合
+     */
+    public List<MyCookie> matchRequestCookies(String url) {
+        if (!isSetCookie) return null;
+        if (null == myCookieJar) return null;
+        List<MyCookie> myCookies = myCookieJar.cookieForRequest(url);
+        Log.d(TAG, "matchRequestCookies: " + myCookies.size());
+        if (myCookies == null || myCookies.size() <= 0) return null;
+        for (int i = 0; i < myCookies.size(); i++) {
+            MyCookie myCookie = myCookies.get(i);
+            if (TextUtils.isEmpty(myCookie.name) || TextUtils.isEmpty(myCookie.value)) {
+                myCookies.remove(i);
+                continue;
+            }
+            boolean isMatch = matchDomain(url, myCookie);
+            if (!isMatch)
+                myCookies.remove(i);
+        }
+        Log.d(TAG, "matchRequestCookies: " + myCookies.size());
+        return myCookies;
     }
 
-    /**
-     * 获取cookie值
-     *
-     * @return cookie
-     */
-    public String getRequestCookie(String url) {
-        if (!isSetCookie) return "";
-        if (myCookieJar == null) return "";
-        List<MyCookie> myCookies = myCookieJar.cookieForRequest(url);
-        if (myCookies == null || myCookies.size() <= 0) return "";
-        StringBuilder builder = new StringBuilder();
-        for (MyCookie myCookie : myCookies) {
-            if (TextUtils.isEmpty(myCookie.name) || TextUtils.isEmpty(myCookie.value))
-                continue;
-            boolean isMatch = matchDomain(url, myCookie);
-            if (isMatch) {
-                builder.append(myCookie.name)
-                        .append("=")
-                        .append(myCookie.value)
-                        .append(";");
-            }
-        }
-        return builder.substring(0, builder.length() - 1);
-    }
 
     /**
      * 解析Set-Cookie，可能存在多个Set-Cookie响应头
@@ -89,27 +82,28 @@ public class MyCookieManager {
      *                token=2E61EE077BE24D90AE95C8DC4B6860ED.023DED37E25223F6A5916CF7AC3C2B71;Version=1;Domain=.lawcert.com;Path=/;HttpOnly
      */
     public void parseResponseCookie(String url, List<String> cookies) {
-        if (myCookieJar != null) {
-            List<MyCookie> myCookies = new ArrayList<>();
-            for (String cookie : cookies) {
-                if (!TextUtils.isEmpty(cookie)) {
-                    MyCookie.Builder builder = new MyCookie.Builder();
-                    if (cookie.contains(";")) {
-                        String[] values = cookie.split(";");
-                        for (String value : values) {
-                            addCookie(value, builder);
-                        }
-                    } else
-                        addCookie(cookie, builder);
-                    MyCookie myCookie = builder.builder();
-                    myCookies.add(myCookie);
-                }
+        if (myCookieJar == null) return;
+        List<MyCookie> myCookies = new ArrayList<>();
+        for (String cookie : cookies) {
+            if (!TextUtils.isEmpty(cookie)) { // 解析Set-Cookie，生成自定义MyCookie
+                MyCookie.Builder builder = new MyCookie.Builder();
+                if (cookie.contains(";")) {
+                    String[] values = cookie.split(";");
+                    for (String value : values) {
+                        createCookie(value, builder);
+                    }
+                } else
+                    createCookie(cookie, builder);
+                MyCookie myCookie = builder.builder();
+                myCookies.add(myCookie);
             }
-            myCookieJar.cookieFromResponse(url, myCookies);
         }
+        myCookieJar.cookieFromResponse(url, myCookies);
+
     }
 
-    private void addCookie(String cookie, MyCookie.Builder builder) {
+
+    private void createCookie(String cookie, MyCookie.Builder builder) {
         if (cookie.contains("=")) {
             cookie = cookie.trim();
             String[] strings = cookie.split("=");
@@ -138,7 +132,7 @@ public class MyCookieManager {
      * @param myCookie 设置的cookie
      * @return 是否匹配
      */
-    public boolean matchDomain(String url, MyCookie myCookie) {
+    private boolean matchDomain(String url, MyCookie myCookie) {
         String domain = myCookie.domain;
         if (TextUtils.isEmpty(domain))
             return true;
