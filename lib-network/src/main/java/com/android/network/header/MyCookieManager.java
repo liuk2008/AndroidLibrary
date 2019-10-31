@@ -3,7 +3,6 @@ package com.android.network.header;
 
 import android.net.Uri;
 import android.text.TextUtils;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +56,6 @@ public class MyCookieManager {
         if (!isSetCookie) return null;
         if (null == myCookieJar) return null;
         List<MyCookie> myCookies = myCookieJar.cookieForRequest(url);
-        Log.d(TAG, "matchRequestCookies: " + myCookies.size());
         if (myCookies == null || myCookies.size() <= 0) return null;
         for (int i = 0; i < myCookies.size(); i++) {
             MyCookie myCookie = myCookies.get(i);
@@ -69,7 +67,6 @@ public class MyCookieManager {
             if (!isMatch)
                 myCookies.remove(i);
         }
-        Log.d(TAG, "matchRequestCookies: " + myCookies.size());
         return myCookies;
     }
 

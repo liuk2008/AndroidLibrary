@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.webkit.CookieManager;
 
 
@@ -45,7 +44,6 @@ public class CookieUtil {
             url = Uri.parse(url).getHost();
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.setAcceptCookie(true);
-        Log.d(TAG, "setCookie: " + url);
         String cookie = buildCookie(url, key, value);
         cookieManager.setCookie(url, cookie); // url在里边起到作用，就是检测domain域名。
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
