@@ -5,25 +5,28 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.webkit.CookieManager;
 
 
 /**
  * 对系统CookieManager进行Cookie的写入操作
- * 1、设置cookie时，会先检测cookie的domain是否和url网址的域名一致，如果不一致设置cookie失败
+ * 1、设置cookie时，会检测WebView加载的url值、setCookie中的url值、cookie的domain值，三者必须一致
  * 2、只有cookie的domain和path与请求的url匹配才会发送这个cookie
  * <p>
- * 1、设置cookie中的domain为通配域名时（.baidu.com）：
- * setCookie(url,cookie)中的url设置为任意全域名，且与WebView加载的url不一致也可以发送该cookie
- * 2、设置cookie中的domain为全域名时（www.baidu.com）：
- * WebView加载的url值、setCookie中的url值、cookie的domain值，三者必须一致才会发送cookie
- * 3、当显示设置domain的时候，事实上会自动在domain值前面加点（.），例如domain=baidu.com，事实上值是.baidu.com，
- * 如果不显示设置domain时，使用默认值就不会加点，那么cookie只对当前域名有效
- * 4、cookie中的path其实就是url发布的路径，比如：
+ * 关于cookie中的domain域名设置
+ * 1、domain为通配域名时（.baidu.com）可以跨域访问，domain为全域名时（www.baidu.com）只能单独访问
+ * 2、显示设置domain时，系统自动在domain值前面加点（.），例如domain=baidu.com，事实上值是.baidu.com，
+ * 3、不显示设置domain时，使用默认值就不会加点，那么cookie只对当前域名有效
+ * <p>
+ * cookie中的path其实就是url发布的路径，比如：
  * https://xxx/foo/bar/index，path=/foo/bar
  * https://xxx/foo/index，path=/foo
  * https://xxx/index，path=/
  * https://xxx/foo/bar/index，设置path=/bar，则cookie无法发送
+ * <p>
+ * 正确使用cookie中的domain：
+ * https://www.cnblogs.com/wenjia-hao/p/7365569.html
  */
 public class CookieUtil {
 
@@ -42,6 +45,7 @@ public class CookieUtil {
             url = Uri.parse(url).getHost();
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.setAcceptCookie(true);
+        Log.d(TAG, "setCookie: " + url);
         String cookie = buildCookie(url, key, value);
         cookieManager.setCookie(url, cookie); // url在里边起到作用，就是检测domain域名。
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
