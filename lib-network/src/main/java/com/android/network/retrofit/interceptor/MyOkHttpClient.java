@@ -3,10 +3,10 @@ package com.android.network.retrofit.interceptor;
 
 import android.content.Context;
 
-import com.android.network.error.ErrorData;
+import com.android.network.NetworkData;
 import com.android.network.error.ErrorException;
-import com.android.network.network.NetworkStatus;
-import com.android.network.network.NetworkUtils;
+import com.android.network.utils.NetworkStatus;
+import com.android.network.utils.NetworkUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -66,8 +66,8 @@ public class MyOkHttpClient {
                 .addInterceptor(new Interceptor() {
                     @Override
                     public Response intercept(Chain chain) throws IOException {
-                        ErrorData errorData = NetworkUtils.checkNet(context);
-                        if (null != errorData) {
+                        NetworkData errorData = NetworkUtils.checkNet(context);
+                        if (null != errorData) { // 网络连接失败，抛出自定义异常
                             throw new ErrorException(errorData.getCode(), errorData.getMsg());
                         } else {
                             return chain.proceed(chain.request());

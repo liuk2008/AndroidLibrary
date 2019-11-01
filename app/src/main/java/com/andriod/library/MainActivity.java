@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
         RetrofitEngine.getInstance().init(getApplicationContext());
         retrofitDemo = new RetrofitDemo();
         retrofitDemo.userInfo();
+//        retrofitDemo.userInfo1();
     }
 
     private void testDatabase() {

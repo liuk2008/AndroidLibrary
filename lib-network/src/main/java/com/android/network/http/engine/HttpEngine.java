@@ -4,14 +4,13 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.android.network.error.ErrorData;
+import com.android.network.NetworkData;
 import com.android.network.header.MyCookie;
 import com.android.network.header.MyCookieManager;
 import com.android.network.header.MyHeaderManager;
-import com.android.network.http.NetData;
 import com.android.network.http.request.HttpParams;
-import com.android.network.network.NetworkStatus;
-import com.android.network.network.NetworkUtils;
+import com.android.network.utils.NetworkStatus;
+import com.android.network.utils.NetworkUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -69,26 +68,18 @@ public class HttpEngine {
         this.httpParams = httpParams;
     }
 
-    private NetData checkNet() {
+    private NetworkData checkNet() {
         if (null == mContext)
             throw new RuntimeException("未初始化 HttpEngine");
-        ErrorData errorData = NetworkUtils.checkNet(mContext);
-        if (null != errorData) {
-            NetData netData = new NetData();
-            netData.setCode(errorData.getCode());
-            netData.setMsg(errorData.getMsg());
-            netData.setData(errorData.getData());
-            return netData;
-        }
-        return null;
+        return NetworkUtils.checkNet(mContext);
     }
 
     /**
      * GET 请求
      * 请求参数赋值在url
      */
-    public NetData doGet() throws Exception {
-        NetData netData = checkNet();
+    public NetworkData doGet() throws Exception {
+        NetworkData netData = checkNet();
         if (netData != null) return netData;
         String url = httpParams.url;
         String params = addParameter(httpParams.params);
@@ -100,8 +91,8 @@ public class HttpEngine {
      * 提交表单数据需要编码
      * 提交json数据不需要编码
      */
-    public NetData doPost() throws Exception {
-        NetData netData = checkNet();
+    public NetworkData doPost() throws Exception {
+        NetworkData netData = checkNet();
         if (netData != null) return netData;
         String url = httpParams.url;
         String params = "";
@@ -116,7 +107,7 @@ public class HttpEngine {
         return request(url, params, "POST");
     }
 
-    public NetData request(String url, String params, String requestMethod) throws Exception {
+    public NetworkData request(String url, String params, String requestMethod) throws Exception {
         HttpURLConnection connection = null;
         InputStream is = null;
         ByteArrayOutputStream baos = null;
@@ -259,10 +250,11 @@ public class HttpEngine {
             }
         }
         Log.d(TAG, "response: result = [" + result + "]");
-        NetData data = new NetData();
+        // 设置网络数据模型
+        NetworkData data = new NetworkData();
         data.setCode(responseCode);
         data.setMsg(msg);
-        data.setData(result);
+        data.setData(result); // 业务层数据
         return data;
     }
 

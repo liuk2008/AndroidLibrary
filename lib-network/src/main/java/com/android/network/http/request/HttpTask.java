@@ -6,11 +6,10 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.network.ApiResponse;
+import com.android.network.NetworkData;
 import com.android.network.Null;
 import com.android.network.callback.Callback;
-import com.android.network.error.ErrorData;
 import com.android.network.error.ErrorHandler;
-import com.android.network.http.NetData;
 import com.android.network.http.engine.HttpEngine;
 import com.google.gson.Gson;
 
@@ -21,7 +20,7 @@ import java.lang.reflect.Type;
 /**
  * 异步执行http/https请求任务
  */
-public class HttpTask<T> extends AsyncTask<Void, Void, NetData> {
+public class HttpTask<T> extends AsyncTask<Void, Void, NetworkData> {
 
     private static final String TAG = "http";
     private HttpEngine httpEngine;
@@ -37,8 +36,8 @@ public class HttpTask<T> extends AsyncTask<Void, Void, NetData> {
     }
 
     @Override
-    protected NetData doInBackground(Void... voids) {
-        NetData netData = new NetData();
+    protected NetworkData doInBackground(Void... voids) {
+        NetworkData netData = null;
         try {
             if (!isCancelled() && mCallback != null) {
                 // 获得超类的泛型参数的实际类型
@@ -57,17 +56,14 @@ public class HttpTask<T> extends AsyncTask<Void, Void, NetData> {
              * 1、网络异常时，捕获异常，通过ErrorHandler处理
              * 2、网络正常，业务层异常通过网络层抛出时，通过ErrorHandler处理
              */
-            ErrorData errorData = ErrorHandler.handlerError(e);
-            netData.setCode(errorData.getCode());
-            netData.setMsg(errorData.getMsg());
-            netData.setData(errorData.getData());
+            netData = ErrorHandler.handlerError(e);
             e.printStackTrace();
         }
         return netData;
     }
 
     @Override
-    protected void onPostExecute(NetData data) {
+    protected void onPostExecute(NetworkData data) {
         super.onPostExecute(data);
         if (mCallback == null)
             return;

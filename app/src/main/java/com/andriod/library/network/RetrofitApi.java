@@ -1,6 +1,7 @@
 package com.andriod.library.network;
 
 
+import io.reactivex.Observable;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -21,6 +22,10 @@ public interface RetrofitApi {
     Call<FinanceListInfo> financeList(@Query("pageIndex") int pageIndex,
                                       @Query("pageSize") int pageSize,
                                       @Query("displayTerminal") String displayTerminal);
+
+    @FormUrlEncoded
+    @POST("user/login")
+    Observable<User> login1(@Field("phone") String phone, @Field("password") String password);
 
 }
 

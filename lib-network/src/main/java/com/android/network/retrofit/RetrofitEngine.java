@@ -3,10 +3,10 @@ package com.android.network.retrofit;
 
 import android.content.Context;
 
-import com.android.network.network.NetworkStatus;
 import com.android.network.retrofit.converter.ConverterFactory;
 import com.android.network.retrofit.converter.DataConverterFactory;
 import com.android.network.retrofit.interceptor.MyOkHttpClient;
+import com.android.network.utils.NetworkStatus;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -75,10 +75,10 @@ public class RetrofitEngine {
                 .baseUrl(url)
                 .client(mOkHttpClient);
         switch (type) {
-            case NetworkStatus.Type.RETROFIT_DEFAULT_DATAWRAPPER:
+            case NetworkStatus.Type.RETROFIT_DATAWRAPPER: // 自定义转换器解析，使用ApiResponse模板解析业务层数据
                 client.addConverterFactory(new DataConverterFactory<>());
                 break;
-            case NetworkStatus.Type.RETROFIT_RXJAVA:
+            case NetworkStatus.Type.RETROFIT_RXJAVA: // 使用Retrofit+RxJava2组合
                 client.addConverterFactory(new ConverterFactory<>());  // 必须设置在 Gson 转换之前
                 client.addCallAdapterFactory(RxJava2CallAdapterFactory.create());
                 client.addConverterFactory(GsonConverterFactory.create());
@@ -88,7 +88,7 @@ public class RetrofitEngine {
                 client.addCallAdapterFactory(RxJava2CallAdapterFactory.create());
                 break;
             default:
-                client.addConverterFactory(new ConverterFactory<>());
+                client.addConverterFactory(new ConverterFactory<>());  // 自定义转换器解析，当网络请求正常但无返回数据时，可使用Null对象解析
                 client.addConverterFactory(GsonConverterFactory.create());
                 break;
         }

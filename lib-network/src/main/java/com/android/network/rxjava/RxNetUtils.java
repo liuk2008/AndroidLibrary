@@ -6,7 +6,7 @@ import android.util.Log;
 
 import com.android.network.callback.Callback;
 import com.android.network.callback.Callback1;
-import com.android.network.error.ErrorData;
+import com.android.network.NetworkData;
 import com.android.network.error.ErrorHandler;
 
 import io.reactivex.Observable;
@@ -44,7 +44,7 @@ public class RxNetUtils {
                         @Override
                         public void accept(Throwable throwable) throws Exception {
                             handleException(throwable);
-                            ErrorData error = ErrorHandler.handlerError(throwable);
+                            NetworkData error = ErrorHandler.handlerError(throwable);
                             callback.onFail(error.getCode(), error.getMsg(), error.getData());
                         }
                     });
@@ -79,7 +79,7 @@ public class RxNetUtils {
                         @Override
                         public void accept(Throwable throwable) throws Exception {
                             handleException(throwable);
-                            ErrorData error = ErrorHandler.handlerError(throwable);
+                            NetworkData error = ErrorHandler.handlerError(throwable);
                             callback.onFail(error.getCode(), error.getMsg(), error.getData());
                         }
                     });

@@ -2,8 +2,8 @@ package com.android.network.retrofit;
 
 import android.util.Log;
 
+import com.android.network.NetworkData;
 import com.android.network.callback.Callback;
-import com.android.network.error.ErrorData;
 import com.android.network.error.ErrorHandler;
 
 import java.io.IOException;
@@ -13,7 +13,7 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 /**
- * Created by liuk on 2018/3/29 0029.
+ * Created by LiuK on 2018/3/29 0029.
  */
 public class CallAdapter<T> implements retrofit2.Callback<T> {
 
@@ -32,11 +32,12 @@ public class CallAdapter<T> implements retrofit2.Callback<T> {
         if (response.isSuccessful()) { // 网络层200
             try {
                 T t = response.body(); // 注意 response 不能被解析的情况下，response.body()会返回null
-                if (mCallback != null) mCallback.onSuccess(t);
+                if (mCallback != null)
+                    mCallback.onSuccess(t);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else {     // 404，500 时执行
+        } else {     // 400，404，500 时执行
             ResponseBody errorBody = response.errorBody();
             String result = null;
             try {
@@ -54,7 +55,7 @@ public class CallAdapter<T> implements retrofit2.Callback<T> {
     public void onFailure(Call<T> call, Throwable throwable) {
         throwable.printStackTrace();
         if (!call.isCanceled() && mCallback != null) {
-            ErrorData errorData = ErrorHandler.handlerError(throwable);
+            NetworkData errorData = ErrorHandler.handlerError(throwable);
             mCallback.onFail(errorData.getCode(), errorData.getMsg(), errorData.getData());
         } else {
             Log.d(TAG, "onFailure: 取消网络请求");

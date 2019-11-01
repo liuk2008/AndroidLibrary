@@ -1,11 +1,14 @@
 package com.android.network.error;
 
+import java.io.IOException;
+
 /**
  * 自定义异常
  * 1、可抛出业务异常
  * 2、可抛出网络层异常
+ * 注意：不能使用 RuntimeException ，否则程序崩溃
  */
-public class ErrorException extends RuntimeException {
+public class ErrorException extends IOException {
 
     private int code;
     private String message;

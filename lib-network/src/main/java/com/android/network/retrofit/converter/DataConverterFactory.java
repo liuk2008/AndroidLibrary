@@ -22,8 +22,12 @@ import retrofit2.Converter;
 import retrofit2.Retrofit;
 
 /**
- * 1、处理无响应体的response
- * 2、捕获response，处理业务异常
+ * 自定义转换器解析
+ * 使用ApiResponse模板解析业务层数据
+ * 1、处理无响应体的response，使用Null解析
+ * 2、业务层非200下，抛出自定义异常
+ * 3、业务层200下，Json解析失败，抛出异常
+ * 4、ApiResponse解析业务层数据
  */
 public class DataConverterFactory<T> extends Converter.Factory {
     private static final String TAG = "DataConverterFactory";
@@ -68,7 +72,7 @@ public class DataConverterFactory<T> extends Converter.Factory {
                             throw new JsonSyntaxException("java.lang.IllegalStateException: Expected BEGIN");
                         }
                         int resultCode = Integer.valueOf(apiResponse.getResultCode());
-                        if (resultCode != 200) { // 非200下，抛出自定义异常
+                        if (resultCode != 200) { // 业务层非200下，抛出自定义异常
                             throw new ErrorException(resultCode, apiResponse.getMessage());
                         }
                         if (type == Null.class || null == apiResponse.getData()) {

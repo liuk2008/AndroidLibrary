@@ -1,4 +1,4 @@
-package com.android.network.network;
+package com.android.network.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -9,7 +9,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.widget.Toast;
 
-import com.android.network.error.ErrorData;
+import com.android.network.NetworkData;
 
 /**
  * 检测网络状态
@@ -22,10 +22,10 @@ public class NetworkUtils {
      * 1、是否连接网络
      * 2、已连接网络，是否可正常访问网络
      */
-    public static ErrorData checkNet(Context context) {
+    public static NetworkData checkNet(Context context) {
         boolean isConnected = isNetConnected(context);
         if (!isConnected) {
-            ErrorData errorData = new ErrorData();
+            NetworkData errorData = new NetworkData();
             errorData.setCode(NetworkStatus.NETWORK_DISCONNECTED.getErrorCode());
             errorData.setMsg(NetworkStatus.NETWORK_DISCONNECTED.getErrorMessage());
             showToast(context, NetworkStatus.NETWORK_DISCONNECTED.getErrorMessage());
@@ -33,7 +33,7 @@ public class NetworkUtils {
         }
         boolean isValidated = isNetValidated(context);
         if (!isValidated) {
-            ErrorData errorData = new ErrorData();
+            NetworkData errorData = new NetworkData();
             errorData.setCode(NetworkStatus.NETWORK_UNABLE.getErrorCode());
             errorData.setMsg(NetworkStatus.NETWORK_UNABLE.getErrorMessage());
             showToast(context, NetworkStatus.NETWORK_UNABLE.getErrorMessage());

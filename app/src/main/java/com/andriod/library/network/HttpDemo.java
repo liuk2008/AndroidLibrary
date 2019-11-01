@@ -32,6 +32,7 @@ public class HttpDemo {
 
             @Override
             public void onFail(int resultCode, String msg, String data) {
+                Log.d("http", "onFail: resultCode:" + resultCode + ", msg:" + msg + ", data:" + data);
 
             }
         });

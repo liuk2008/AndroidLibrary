@@ -12,7 +12,8 @@ import retrofit2.Converter;
 import retrofit2.Retrofit;
 
 /**
- * 将响应对象responseBody转成目标类型对象(也就是Call里给定的类型)
+ * 自定义转换器解析
+ * 将响应对象responseBody转成目标类型对象(也就是Call里给定的类型)，当网络请求正常但无返回数据时，可使用Null对象解析
  *
  * @param <T>
  */
