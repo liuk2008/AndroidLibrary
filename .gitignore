@@ -66,3 +66,4 @@ fastlane/readme.md
 /*.iml
 /.idea
 /lib-scan/*.iml
+/local.properties
