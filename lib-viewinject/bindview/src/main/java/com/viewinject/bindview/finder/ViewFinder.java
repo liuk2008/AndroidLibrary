@@ -1,7 +1,7 @@
 package com.viewinject.bindview.finder;
 
 import android.app.Activity;
-import android.support.annotation.UiThread;
+import androidx.annotation.UiThread;
 import android.view.View;
 
 public class ViewFinder implements Finder {

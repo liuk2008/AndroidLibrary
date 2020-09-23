@@ -9,7 +9,7 @@ import android.content.pm.PackageStats;
 import android.os.Build;
 import android.os.Process;
 import android.os.storage.StorageManager;
-import android.support.annotation.RequiresApi;
+import androidx.annotation.RequiresApi;
 
 import java.lang.reflect.Method;
 

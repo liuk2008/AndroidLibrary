@@ -19,8 +19,8 @@ dependencies {
     // groovy sdk
     implementation  localGroovy()
     // Android编译的大部分gradle源码，比如TaskManager、ransform API
-    implementation 'com.android.tools.build:gradle:3.2.0'
-    implementation 'org.javassist:javassist:3.24.0-GA'
+    implementation 'com.android.tools.build:gradle:4.0.1'
+    implementation 'org.javassist:javassist:3.27.0-GA'
 }
 
 repositories {

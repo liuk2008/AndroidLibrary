@@ -29,7 +29,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
     // retrofit 网络框架
     api 'com.squareup.retrofit2:retrofit:2.3.0'
     // retrofit与gson适配器
@@ -43,7 +43,7 @@ dependencies {
     // rxjava2 + rxandroid
     api 'io.reactivex.rxjava2:rxjava:2.1.8'
     api 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    api 'com.google.code.gson:gson:2.8.4'
+    api 'com.google.code.gson:gson:2.8.6'
 }
 
 //apply from: 'bintray.gradle'

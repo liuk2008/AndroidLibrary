@@ -17,7 +17,7 @@ import com.android.common.R;
  * 自定义输入框
  * Created by Administrator on 2016/11/1.
  */
-public class PasswordView extends android.support.v7.widget.AppCompatEditText {
+public class PasswordView extends androidx.appcompat.widget.AppCompatEditText {
     private static final String TAG = "PasswordView";
     private Paint bordPaint;//外框画笔
     private Paint linePaint;//线的画笔
@@ -40,9 +40,9 @@ public class PasswordView extends android.support.v7.widget.AppCompatEditText {
 
     public PasswordView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.PasswordView);
-        passwordLength = array.getInt(R.styleable.PasswordView_password_length, 8);
-        passwordTextSize = array.getFloat(R.styleable.PasswordView_password_textSize, 48);
+        TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.common_PasswordView);
+        passwordLength = array.getInt(R.styleable.common_PasswordView_common_password_length, 8);
+        passwordTextSize = array.getFloat(R.styleable.common_PasswordView_common_password_textSize, 48);
         setFilters(new InputFilter[]{new InputFilter.LengthFilter(passwordLength)});
         initPaint();
     }

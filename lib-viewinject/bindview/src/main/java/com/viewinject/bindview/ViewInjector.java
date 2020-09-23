@@ -1,6 +1,6 @@
 package com.viewinject.bindview;
 
-import android.support.annotation.UiThread;
+import androidx.annotation.UiThread;
 
 import com.viewinject.bindview.finder.Finder;
 

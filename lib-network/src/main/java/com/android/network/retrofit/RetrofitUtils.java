@@ -1,6 +1,6 @@
 package com.android.network.retrofit;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.android.network.callback.Callback;
 

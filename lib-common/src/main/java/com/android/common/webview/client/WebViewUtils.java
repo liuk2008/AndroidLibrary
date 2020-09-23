@@ -1,7 +1,7 @@
 package com.android.common.webview.client;
 
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.text.TextUtils;
 
 import java.util.HashMap;
