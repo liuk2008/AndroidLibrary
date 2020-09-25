@@ -27,6 +27,7 @@
 # "proguard-android-optimize.txt" file instead of this one from your
 # project.properties file.
 
+# noinspection ShrinkerUnresolvedReference
 # 保留注解中的参数
 -keepattributes *Annotation*
 # 不混淆如下两个谷歌服务类
