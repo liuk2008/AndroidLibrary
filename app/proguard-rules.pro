@@ -105,13 +105,13 @@
 }
 
 # 保留 WebView 相关
-#-keepclassmembers class * extends android.webkit.WebViewClient {
-#    public void *(android.webkit.WebView, java.lang.String, android.graphics.Bitmap);
-#    public boolean *(android.webkit.WebView, java.lang.String);
-#}
-#-keepclassmembers class * extends android.webkit.webViewClient {
-#    public void *(android.webkit.webView, jav.lang.String);
-#}
+-keepclassmembers class * extends android.webkit.WebViewClient {
+    public void *(android.webkit.WebView, java.lang.String, android.graphics.Bitmap);
+    public boolean *(android.webkit.WebView, java.lang.String);
+}
+-keepclassmembers class * extends android.webkit.WebChromeClient  {
+    public void *(android.webkit.WebView, java.lang.String);
+}
 
 # WebView中使用了JS调用，保留JavaScript调试属性
 -keepattributes *JavascriptInterface*
