@@ -6,7 +6,7 @@ ext {
 
     publishedGroupId = 'com.android.library' // 发布的组织名称
     artifact = 'common'            // 依赖的lib名称
-    libraryVersion = '1.0'   // 版本号
+    libraryVersion = '1.1'   // 版本号
 
     username = 'chanba2010'
     userkey = 'c45f983479dd72be69d3af6a09ad9045a6312909'
