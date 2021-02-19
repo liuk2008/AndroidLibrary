@@ -39,7 +39,8 @@ public class HttpParams {
             if (null == value || "".equals(String.valueOf(value))) {
                 return this;
             } else {
-                params.put(String.valueOf(key), String.valueOf(value));
+                // 兼容所有格式
+                params.put(String.valueOf(key), value);
                 return this;
             }
         }

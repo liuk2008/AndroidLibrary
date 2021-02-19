@@ -1,7 +1,9 @@
 package com.android.network.http.request;
 
 import android.os.AsyncTask;
+
 import androidx.annotation.NonNull;
+
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -40,9 +42,24 @@ public class HttpTask<T> extends AsyncTask<Void, Void, NetworkData> {
         NetworkData netData = null;
         try {
             if (!isCancelled() && mCallback != null) {
+//                ParameterizedType parameterizedType = (ParameterizedType) mCallback.getClass().getGenericInterfaces()[0];
+//                type = parameterizedType.getActualTypeArguments()[0];
+//                wrapperType = getWrapperType();
+//                if ("GET".equals(mRequestMethod)) {
+//                    return httpEngine.doGet();
+//                } else {
+//                    return httpEngine.doPost();
+//                }
                 // 获得超类的泛型参数的实际类型
-                ParameterizedType parameterizedType = (ParameterizedType) mCallback.getClass().getGenericInterfaces()[0];
-                type = parameterizedType.getActualTypeArguments()[0];
+                Type[] genericInterfaces = mCallback.getClass().getGenericInterfaces();
+                if (genericInterfaces == null || genericInterfaces.length == 0) {
+                    ParameterizedType parameterizedType = (ParameterizedType) mCallback.getClass().getGenericSuperclass();
+                    type = parameterizedType.getActualTypeArguments()[0];
+                } else {
+                    ParameterizedType parameterizedType = (ParameterizedType) genericInterfaces[0];
+                    type = parameterizedType.getActualTypeArguments()[0];
+                }
+                Log.d(TAG, "onPostExecute: " + type);
                 wrapperType = getWrapperType();
                 if ("GET".equals(mRequestMethod)) {
                     return httpEngine.doGet();
