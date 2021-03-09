@@ -1,5 +1,10 @@
 # AndroidLibrary #
 
+**Transform详解**
+
+    * 1、Gradle插件包含了一个叫Transform的API，这个API允许第三方插件在class文件转为为dex文件前操作编译好的class文件，这个API的目标就是简化class文件的自定义的操作而不用对Task进行处理。
+    * 2、Transform是作用在.class编译后，打包成.dex前，可以对.class和resource进行再处理的部分。
+
 **自定义Android Gradle插件**
 
     * 1、在工程下新建一个module，名字必须为buildSrc或buildsrc，系统默认识别此目录
