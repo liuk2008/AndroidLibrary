@@ -9,8 +9,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.METHOD)
 public @interface MyOnClick {
-    int value() default -1;
+    int value() default -1; // 主项目中使用
 
-    String resId() default "";
+    String resId() default "";  // lib中使用
 
 }
