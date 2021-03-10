@@ -1,4 +1,6 @@
 apply plugin: 'groovy'
+//添加maven plugin, 用于发布本地插件
+apply plugin: 'maven'
 
 buildscript {
     repositories {
@@ -27,6 +29,21 @@ dependencies {
 repositories {
     google()
     jcenter()
+}
+
+
+// 生成本地仓库
+group = 'com.android.plugin'
+archivesBaseName = 'viewinject'
+version = '1.1'
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            //在当前同级目录下生成maven包
+            repository(url: uri('repository'))
+        }
+    }
 }
 
 //apply from: 'bintray.gradle'
