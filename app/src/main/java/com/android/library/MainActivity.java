@@ -1,13 +1,14 @@
-package com.andriod.library;
+package com.android.library;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.andriod.library.database.DatabaseDao;
-import com.andriod.library.network.HttpDemo;
-import com.andriod.library.network.RetrofitDemo;
+
+import com.android.library.database.DatabaseDao;
+import com.android.library.network.HttpDemo;
+import com.android.library.network.RetrofitDemo;
 import com.android.network.header.MyCookie;
 import com.android.network.header.MyCookieJar;
 import com.android.network.header.MyCookieManager;

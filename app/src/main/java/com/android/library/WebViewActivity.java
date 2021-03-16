@@ -1,4 +1,4 @@
-package com.andriod.library;
+package com.android.library;
 
 import android.content.Intent;
 import android.net.http.SslError;

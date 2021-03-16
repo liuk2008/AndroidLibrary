@@ -1,4 +1,4 @@
-package com.andriod.library.database;
+package com.android.library.database;
 
 
 import com.android.database.annotation.Column;

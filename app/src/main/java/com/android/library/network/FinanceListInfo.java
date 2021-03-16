@@ -1,4 +1,4 @@
-package com.andriod.library.network;
+package com.android.library.network;
 
 import com.google.gson.annotations.SerializedName;
 
