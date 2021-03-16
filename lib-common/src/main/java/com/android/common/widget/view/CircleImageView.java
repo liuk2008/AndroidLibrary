@@ -15,8 +15,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.support.annotation.ColorRes;
-import android.support.annotation.DrawableRes;
+import androidx.annotation.ColorRes;
+import androidx.annotation.DrawableRes;
 import android.util.AttributeSet;
 
 import com.android.common.R;
@@ -26,7 +26,7 @@ import com.android.common.R;
  * 圆形imageview
  * Created by Administrator on 2016/12/14.
  */
-public class CircleImageView extends android.support.v7.widget.AppCompatImageView {
+public class CircleImageView extends androidx.appcompat.widget.AppCompatImageView {
     //缩放类型
     private static final ScaleType SCALE_TYPE = ScaleType.CENTER_CROP;
     private static final Bitmap.Config BITMAP_CONFIG = Bitmap.Config.ARGB_8888;
@@ -75,13 +75,13 @@ public class CircleImageView extends android.support.v7.widget.AppCompatImageVie
     public CircleImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         //通过obtainStyledAttributes 获得一组值赋给 TypedArray（数组） , 这一组值来自于res/values/attrs.xml中的name="CircleImageView"的declare-styleable中。
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CircleImageView, defStyleAttr, 0);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.common_CircleImageView, defStyleAttr, 0);
         //通过TypedArray提供的一系列方法getXXXX取得我们在xml里定义的参数值；
         // 获取边界的宽度
-        mBorderWidth = a.getDimensionPixelSize(R.styleable.CircleImageView_border_width, DEFAULT_BORDER_WIDTH);
+        mBorderWidth = a.getDimensionPixelSize(R.styleable.common_CircleImageView_common_border_width, DEFAULT_BORDER_WIDTH);
         // 获取边界的颜色
-        mBorderColor = a.getColor(R.styleable.CircleImageView_border_color, DEFAULT_BORDER_COLOR);
-        mBorderOverlay = a.getBoolean(R.styleable.CircleImageView_border_overlay, DEFAULT_BORDER_OVERLAY);
+        mBorderColor = a.getColor(R.styleable.common_CircleImageView_common_border_color, DEFAULT_BORDER_COLOR);
+        mBorderOverlay = a.getBoolean(R.styleable.common_CircleImageView_common_border_overlay, DEFAULT_BORDER_OVERLAY);
         //调用 recycle() 回收TypedArray,以便后面重用
         a.recycle();
         init();

@@ -1,4 +1,4 @@
-package com.andriod.library.database;
+package com.android.library.database;
 
 import android.Manifest;
 import android.app.Activity;
@@ -6,13 +6,12 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
-import android.support.v4.app.ActivityCompat;
+import androidx.core.app.ActivityCompat;
 import android.util.Log;
-
 import com.android.database.config.DatabaseConfig;
 import com.android.database.manager.DatabaseManager;
-
 import java.util.List;
+
 
 public class DatabaseDao {
 

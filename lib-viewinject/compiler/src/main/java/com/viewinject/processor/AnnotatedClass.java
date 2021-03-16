@@ -88,13 +88,13 @@ public class AnnotatedClass {
                 .addModifiers(Modifier.PRIVATE);
         classSpec.addField(targetSpec.build());
 
-        // 3、构建方法  public void inject(Object object,Object source,Finder finder)
+
         // Map参数类型 Map<String,Integer> resIdMap
         ParameterizedTypeName mapTypeName = ParameterizedTypeName.get(ClassName.get(Map.class),
                 ClassName.get(String.class),
                 ClassName.get(Integer.class));
 
-
+        // 3、构建方法  public void inject(T t,Object object, Class<?> cls,Finder finder)
         MethodSpec.Builder injectMethodSpec = MethodSpec.methodBuilder("inject")
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(Override.class)
@@ -105,14 +105,14 @@ public class AnnotatedClass {
                 .addParameter(Class.class, "cls")
                 .addParameter(TypeUtil.FINDER, "finder");
 
-        //  构建方法 public void unbind(Object target)
+        //  构建方法 public void unbind()
         MethodSpec.Builder unbindMethodSpec = MethodSpec.methodBuilder("unbind")
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(Override.class)
                 .addAnnotation(TypeUtil.ANDROID_ANNOTATION_UITHREAD)
                 .returns(TypeName.VOID);
 
-        // 4、添加方法内容  host.textview = (TextView) host.findViewById(R.id.textview)
+        // 4、添加方法内容
         injectMethodSpec.addStatement("target = object");
         unbindMethodSpec.addStatement("if (target == null) throw new IllegalStateException(\"Bindings already cleared.\")");
 
@@ -120,9 +120,11 @@ public class AnnotatedClass {
             for (MyBindViewField field : mFeild) {
                 String fieldName = field.getFieldName();
                 TypeMirror fieldType = field.getFieldType();
-                int resId = field.getResId();
-                String idName = field.getIdName();
+                int resId = field.getResId(); // 获取主项目中的id值
+                String idName = field.getIdName(); // 获取lib中的did值
+                // host.textView = (TextView) host.findViewById(R.id.tv_msg)
                 if (!"".equals(idName)) {
+                    // 读取 com.viewinject.bindview.Id.class中的值
                     injectMethodSpec.addStatement("target.$N = ($T)finder.findView(source,cls,$S)", fieldName, ClassName.get(fieldType), idName);
                 } else {
                     injectMethodSpec.addStatement("target.$N = ($T)finder.findView(source,$L)", fieldName, ClassName.get(fieldType), resId);

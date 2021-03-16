@@ -8,11 +8,11 @@ tasks.withType(JavaCompile) {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     // 注解 processor 类，方便系统识别
-    implementation "com.google.auto.service:auto-service:1.0-rc4"
+    implementation 'com.google.auto.service:auto-service:1.0-rc7'
     // JavaPoet 是一个用来生成 .java源文件的Java API
-    implementation "com.squareup:javapoet:1.11.1"
+    implementation 'com.squareup:javapoet:1.13.0'
 
-    implementation 'com.android.library:viewinject-annotation:1.0'
+    implementation 'com.android.library:viewinject-annotation:1.1'
 //    implementation project(':lib-viewinject:annotation')
 
 }

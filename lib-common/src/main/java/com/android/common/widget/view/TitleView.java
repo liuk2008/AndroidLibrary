@@ -5,7 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 
 import com.android.common.utils.system.DensityUtils;
@@ -14,7 +14,7 @@ import com.android.common.utils.system.DensityUtils;
 /**
  * Created by liuk on 2019/5/5
  */
-public class TitleView extends android.support.v7.widget.AppCompatTextView {
+public class TitleView extends androidx.appcompat.widget.AppCompatTextView {
 
     private Paint linePaint;
     private Paint textPaint;

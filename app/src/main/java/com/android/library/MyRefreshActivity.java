@@ -1,16 +1,17 @@
-package com.andriod.library;
+package com.android.library;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 
-import com.andriod.library.network.FinanceListInfo;
-import com.andriod.library.network.RetrofitDemo;
+
 import com.android.common.refreshview.MyCommonAdapter;
 import com.android.common.refreshview.MyRefreshView;
 import com.android.common.refreshview.MyViewHolder;
 import com.android.common.utils.common.LogUtils;
 import com.android.common.utils.common.ToastUtils;
+import com.android.library.network.FinanceListInfo;
+import com.android.library.network.RetrofitDemo;
 import com.android.network.callback.Callback;
 import com.android.network.retrofit.RetrofitEngine;
 

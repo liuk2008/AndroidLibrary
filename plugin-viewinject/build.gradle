@@ -1,4 +1,6 @@
 apply plugin: 'groovy'
+//添加maven plugin, 用于发布本地插件
+apply plugin: 'maven'
 
 buildscript {
     repositories {
@@ -19,13 +21,29 @@ dependencies {
     // groovy sdk
     implementation  localGroovy()
     // Android编译的大部分gradle源码，比如TaskManager、ransform API
-    implementation 'com.android.tools.build:gradle:3.2.0'
-    implementation 'org.javassist:javassist:3.24.0-GA'
+    implementation 'com.android.tools.build:gradle:4.0.2'
+    // javaassist 就是一个用来处理 Java 字节码的类库
+    implementation 'org.javassist:javassist:3.27.0-GA'
 }
 
 repositories {
     google()
     jcenter()
+}
+
+
+// 生成本地仓库
+group = 'com.android.plugin'
+archivesBaseName = 'viewinject'
+version = '1.1'
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            //在当前同级目录下生成maven包
+            repository(url: uri('repository'))
+        }
+    }
 }
 
 //apply from: 'bintray.gradle'
