@@ -1,7 +1,14 @@
 apply plugin: 'com.android.application'
 
+//定义打包时间
+def static getDate() {
+    return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
+}
+
 android {
+
     compileSdkVersion 28
+
     defaultConfig {
         applicationId "com.android.library"
         minSdkVersion 19
@@ -9,12 +16,21 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        // dex突破65535的限制
+        multiDexEnabled true
     }
+
     signingConfigs {
         release {
             storeFile file("../release.jks")
             storePassword "123456"
             keyAlias "product"
+            keyPassword "123456"
+        }
+        debug {
+            storeFile file("../debug.jks")
+            storePassword "123456"
+            keyAlias "debug"
             keyPassword "123456"
         }
     }
@@ -27,6 +43,16 @@ android {
             shrinkResources true                                         // 移除无用的resource文件
             zipAlignEnabled true                                        // Zipalign优化
             signingConfig signingConfigs.release
+            buildConfigField 'String', 'SERVER_URL', "\"http://jfx.qdfaw.com:8081/release\""
+
+        }
+        debug {
+            minifyEnabled false
+            shrinkResources false
+            zipAlignEnabled false
+            debuggable true
+            signingConfig signingConfigs.debug
+            buildConfigField 'String', 'SERVER_URL', "\"http://jfx.qdfaw.com:8081/debug\""
         }
     }
 
@@ -35,6 +61,18 @@ android {
         abortOnError false
         disable 'GoogleAppIndexingWarning'
     }
+
+    // 配置打包名称
+    android.applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def outputFileName = output.outputFileName
+            if (outputFileName != null && outputFileName.endsWith('.apk')) {
+                def fileName = "AndroidLibrary_v${defaultConfig.versionName}_${getDate()}_${variant.name}.apk"
+                output.outputFileName = new File(fileName)
+            }
+        }
+    }
+
 }
 
 dependencies {
