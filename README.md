@@ -16,3 +16,4 @@
          * 1、annotation：注解包，统一管理注解。包括：MyBindView、MyOnClick
          * 2、compiler：注解管理器包，在编译时扫描和处理注解，生成对应的Java文件，统一处理注解作用的元素
          * 3、bindview：通过反射调用APT生成的Java文件，实现控件id的查找
+    * 6、添加混淆规则
