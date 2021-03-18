@@ -5,10 +5,6 @@ buildscript {
     repositories {
         google()
         jcenter()
-        maven {
-            //Gradle插件发布在本地仓库
-            url uri('plugin-viewinject/repository')
-        }
     }
     dependencies {
         classpath "com.android.tools.build:gradle:4.0.2"
@@ -18,7 +14,6 @@ buildscript {
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
-        classpath 'com.android.plugin:viewinject:1.1'
     }
 }
 

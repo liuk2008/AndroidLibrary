@@ -101,7 +101,7 @@ public class RetrofitEngine {
         return new RequestBuilder();
     }
 
-    public class RequestBuilder {
+    public static class RequestBuilder {
         private Map<String, Object> hashMap = new HashMap<>();
 
         public RequestBuilder append(Object key, Object value) {
