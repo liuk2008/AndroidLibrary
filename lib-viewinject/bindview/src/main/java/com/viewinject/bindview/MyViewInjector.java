@@ -1,7 +1,9 @@
 package com.viewinject.bindview;
 
 import android.app.Activity;
+
 import androidx.fragment.app.Fragment;
+
 import android.view.View;
 
 import com.viewinject.bindview.finder.ViewFinder;
@@ -16,7 +18,6 @@ public class MyViewInjector {
     private static final Map<String, ViewInjector> injectorMap = new HashMap<>();
 
     private static ViewFinder viewFinder = new ViewFinder();
-    private static Class cls = null;
 
     public static void bindView(Activity activity) {
         bind(activity, activity);
@@ -36,9 +37,6 @@ public class MyViewInjector {
 
     private static void bind(Object target, Object source) {
         try {
-            if (cls == null) {
-                cls = Class.forName("com.viewinject.bindview.Id");
-            }
             String className = target.getClass().getName();
             ViewInjector injector = injectorMap.get(className);
             if (injector == null) {
@@ -47,7 +45,7 @@ public class MyViewInjector {
                 injector = (ViewInjector) clazz.newInstance();
                 injectorMap.put(className, injector);
             }
-            injector.inject(target, source, cls, viewFinder);
+            injector.inject(target, source, viewFinder);
         } catch (Exception e) {
             e.printStackTrace();
         }

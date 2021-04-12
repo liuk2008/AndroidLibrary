@@ -1,6 +1,7 @@
 package com.viewinject.bindview.finder;
 
 import androidx.annotation.UiThread;
+
 import android.view.View;
 
 public interface Finder {
@@ -8,5 +9,5 @@ public interface Finder {
     View findView(Object object, int resId);
 
     @UiThread
-    View findView(Object object, Class<?> cls, String idName);
+    View findView(Object object, String idName);
 }

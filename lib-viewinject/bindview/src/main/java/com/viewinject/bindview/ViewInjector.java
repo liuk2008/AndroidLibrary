@@ -7,7 +7,7 @@ import com.viewinject.bindview.finder.Finder;
 public interface ViewInjector<T> {
 
     @UiThread
-    void inject(T t, Object source, Class<?> cls, Finder finder);
+    void inject(T t, Object source, Finder finder);
 
     @UiThread
     void unbind();
