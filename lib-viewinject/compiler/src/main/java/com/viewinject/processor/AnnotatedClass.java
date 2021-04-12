@@ -94,7 +94,7 @@ public class AnnotatedClass {
                 ClassName.get(String.class),
                 ClassName.get(Integer.class));
 
-        // 3、构建方法  public void inject(T t,Object object, Class<?> cls,Finder finder)
+        // 3、构建方法  public void inject(T t,Object object,Finder finder)
         MethodSpec.Builder injectMethodSpec = MethodSpec.methodBuilder("inject")
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(Override.class)
@@ -102,7 +102,6 @@ public class AnnotatedClass {
                 .returns(TypeName.VOID)
                 .addParameter(classTypeName, "object", Modifier.FINAL)// 入参为Activity、Fragment
                 .addParameter(Object.class, "source")
-                .addParameter(Class.class, "cls")
                 .addParameter(TypeUtil.FINDER, "finder");
 
         //  构建方法 public void unbind()
@@ -125,7 +124,7 @@ public class AnnotatedClass {
                 // host.textView = (TextView) host.findViewById(R.id.tv_msg)
                 if (!"".equals(idName)) {
                     // 读取 com.viewinject.bindview.Id.class中的值
-                    injectMethodSpec.addStatement("target.$N = ($T)finder.findView(source,cls,$S)", fieldName, ClassName.get(fieldType), idName);
+                    injectMethodSpec.addStatement("target.$N = ($T)finder.findView(source,$S)", fieldName, ClassName.get(fieldType), idName);
                 } else {
                     injectMethodSpec.addStatement("target.$N = ($T)finder.findView(source,$L)", fieldName, ClassName.get(fieldType), resId);
                 }
@@ -155,7 +154,7 @@ public class AnnotatedClass {
                         .addModifiers(Modifier.PRIVATE);
                 classSpec.addField(fieldSpec.build());
                 if (!"".equals(idName)) {
-                    injectMethodSpec.addStatement("this.$N = finder.findView(source,cls,$S)", methodName, idName);
+                    injectMethodSpec.addStatement("this.$N = finder.findView(source,$S)", methodName, idName);
                 } else {
                     injectMethodSpec.addStatement("this.$N = finder.findView(source,$L)", methodName, resId);
                 }
