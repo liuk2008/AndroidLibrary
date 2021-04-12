@@ -85,4 +85,8 @@ dependencies {
     implementation project(":lib-database")
     implementation project(":lib-common")
     implementation project(":lib-network")
+
+    // viewinject工具包
+    implementation project(":lib-viewinject:bindview")
+    annotationProcessor project(":lib-viewinject:compiler")
 }
